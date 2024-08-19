@@ -14,15 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.main.map.MapFragment">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <com.kakao.vectormap.MapView
+            android:id="@+id/kakao_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="맵 화면"
-            android:textSize="32dp"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

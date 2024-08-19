@@ -7,7 +7,7 @@ import com.example.daejangjung2.common.livedata.SingleLiveEvent
 
 class MainViewModel: ViewModel() {
     private val _curScreen: MutableLiveData<ScreenType.ChangeScreenType> =
-        MutableLiveData(ScreenType.ChangeScreenType.Home)
+        MutableLiveData(ScreenType.ChangeScreenType.Map)
     val curScreen: LiveData<ScreenType.ChangeScreenType>
         get() = _curScreen
 

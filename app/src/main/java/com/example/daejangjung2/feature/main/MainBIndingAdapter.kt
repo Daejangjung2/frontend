@@ -1,7 +1,6 @@
-package com.example.daejangjung2.feature
+package com.example.daejangjung2.feature.main
 
 import androidx.databinding.BindingAdapter
-import com.example.daejangjung2.feature.main.ScreenType
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 @BindingAdapter("onNavigationItemSelected")

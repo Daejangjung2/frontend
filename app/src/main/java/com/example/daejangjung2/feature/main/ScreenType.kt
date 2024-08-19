@@ -22,7 +22,7 @@ sealed class ScreenType(val tag: String, val isChangeBottomTab: Boolean) {
                 R.id.menu_item_map -> ChangeScreenType.Map
                 R.id.menu_item_community -> ChangeScreenType.Community
                 R.id.menu_item_my_page -> ChangeScreenType.MyPage
-                else -> ChangeScreenType.Home
+                else -> ChangeScreenType.Map
             }
         }
     }

@@ -6,6 +6,7 @@ import android.provider.Settings
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.daejangjung2.BuildConfig
 import com.example.daejangjung2.common.util.log
+import com.kakao.vectormap.KakaoMapSdk
 import timber.log.Timber
 
 class DaejangjungApplication: Application() {
@@ -22,6 +23,9 @@ class DaejangjungApplication: Application() {
             Timber.plant(Timber.DebugTree())
             log(message = "deviceId: $deviceId")
         }
+
+        KakaoMapSdk.init(this, BuildConfig.KAKAO_KEY);
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // 다크모드 일단은 방지
     }
 
