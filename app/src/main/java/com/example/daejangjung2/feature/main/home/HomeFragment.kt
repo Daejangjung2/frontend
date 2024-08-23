@@ -23,6 +23,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     companion object {
         private const val REQUEST_CODE: Int = 1
         @JvmStatic
-        fun newInstance() = MyPageFragment()
+        fun newInstance() = HomeFragment()
     }
 }

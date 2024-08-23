@@ -32,8 +32,6 @@ import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapType
 import com.kakao.vectormap.MapView
 import com.kakao.vectormap.MapViewInfo
-import com.kakao.vectormap.label.Label
-import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 
@@ -102,7 +100,7 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
             }, object : KakaoMapReadyCallback() {
                 override fun onMapReady(map: KakaoMap) {
                     // 인증 후 API가 정상적으로 실행될 때 호출됨
-                    addMarker(map)
+//                    addMarker(map)
                     kakaoMap = map;
                 }
 
@@ -201,6 +199,6 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         private const val DAEJANGJUNG: String = "DAJANGJUNG"
 
         @JvmStatic
-        fun newInstance() = MyPageFragment()
+        fun newInstance() = MapFragment()
     }
 }

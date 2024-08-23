@@ -26,6 +26,6 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
     companion object {
         private const val REQUEST_CODE: Int = 1
         @JvmStatic
-        fun newInstance() = MyPageFragment()
+        fun newInstance() = CommunityFragment()
     }
 }

@@ -28,8 +28,8 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.curScreen.value != ScreenType.ChangeScreenType.Map) { // 홈으로 이동시켜서 한 번 더 상품들을 노출시키기
-                binding.bnvMain.selectedItemId = R.id.menu_item_map
+            if (viewModel.curScreen.value != ScreenType.ChangeScreenType.Home) { // 홈으로 이동시켜서 한 번 더 상품들을 노출시키기
+                binding.bnvMain.selectedItemId = R.id.menu_item_home
                 return
             }
             backKeyHandler.onBackPressed()
