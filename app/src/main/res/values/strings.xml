@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Daejangjung2</string>
+    <string name="all_network_check_please_message">인터넷 연결을 확인해주세요</string>
+    <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
+    <string name="all_snackbar_default_action">확인</string>
+    <string name="all_dialog_default_positive_button">데이터</string>
+
+    <string name="bottom_navigation_home">홈</string>
+    <string name="bottom_navigation_map">지도</string>
+    <string name="bottom_navigation_community">커뮤니티</string>
+    <string name="bottom_navigation_my_page">마이페이지</string>
+
+    <!--map-->
+    <string name="map_location_permission_upgrade_require_message">정확한 위치를 활용하려면 위치 권한을 업데이트해주세요!</string>
+    <string name="map_location_permission_require_message">원활한 동작을 위해 위치 권한을 켜주세요.</string>
+    <string name="map_location_service_turn_on_require_message">GPS를 먼저 켜주세요.</string>
+</resources>
