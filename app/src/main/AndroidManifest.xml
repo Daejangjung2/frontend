@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Daejangjung2"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value=""/>
 
         <activity
             android:name=".feature.auth.login.LoginActivity"

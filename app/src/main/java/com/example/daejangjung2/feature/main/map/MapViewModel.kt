@@ -63,8 +63,7 @@ class MapViewModel: ViewModel() {
     }
 
     sealed class Event {
-        object ShowMapStoreInfo : Event()
-        data class ToastMessage(val message: String) : Event()
-        object NavigateToQR: Event()
+        object Success: Event();
+        data class Failed(val message: String): Event();
     }
 }
