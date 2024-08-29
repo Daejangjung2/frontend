@@ -1,8 +1,11 @@
 package com.example.daejangjung2.app
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
+import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.daejangjung2.BuildConfig
 import com.example.daejangjung2.common.util.log

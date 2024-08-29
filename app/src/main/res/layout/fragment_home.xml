@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.daejangjung2.feature.main.home.HomeViewModel" />
@@ -13,16 +14,249 @@
         android:id="@+id/home_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".feature.main.home.HomeFragment">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        tools:context=".feature.main.home.HomeFragment"
+        android:background="@color/grey_F8F8F8">
+
+        <ScrollView
+            android:id="@+id/tb_registerInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="홈"
-            android:textSize="32dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Header Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/header_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginHorizontal="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="2dp"
+                        android:text="@string/home_title"
+                        android:textColor="#469CFF"
+                        android:textSize="28dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/ic_account_circle_24"
+                        android:backgroundTint="@color/vista_blue_469CFF"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Banner Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/banner_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp"
+                    android:layout_marginTop="16dp">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/viewFadingEdge"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        app:layout_constraintBottom_toBottomOf="@id/viewPager_banner" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutIndicators"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="@id/viewPager_banner"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Activity Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/activity_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="216dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:background="@drawable/home_border_shadow"
+                    android:elevation="4dp">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_begin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="8dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_end="8dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_top"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_begin="12dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/activity_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_end="8dp" />
+
+                    <TextView
+                        android:id="@+id/activity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/activity_begin"
+                        app:layout_constraintTop_toTopOf="@id/activity_top"
+                        android:textSize="16dp"
+                        android:text="나의 활동"
+                        android:textFontWeight="@integer/m3_sys_motion_duration_long4"/>"
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/distance_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/activity_begin"
+                        app:layout_constraintTop_toBottomOf="@id/activity_title"
+                        app:layout_constraintEnd_toEndOf="@id/activity_end"
+                        app:layout_constraintBottom_toBottomOf="@id/activity_bottom"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/boder_grey">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/distance_begin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/distance_end"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/distance_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_begin="12dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/distance_bottom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_end="8dp" />
+
+                        <TextView
+                            android:id="@+id/distance_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/distance_top"
+                            app:layout_constraintStart_toStartOf="@id/distance_begin"
+                            android:textSize="12dp"
+                            android:text="나의 이동거리"/>
+
+                        <TextView
+                            android:id="@+id/distance_record"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="@id/distance_begin"
+                            app:layout_constraintTop_toBottomOf="@id/distance_title"
+                            android:textSize="24dp"
+                            android:text="@={viewModel.distance}"
+                            android:hint="0 M"/>
+
+                        <TextView
+                            android:id="@+id/distance_medal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="@id/distance_begin"
+                            app:layout_constraintTop_toBottomOf="@id/distance_record"
+                            android:layout_marginTop="8dp"
+                            android:textSize="12dp"
+                            android:text="내가 획득한 뱃지 : "/>
+
+                        <TextView
+                            android:id="@+id/distance_medal_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toEndOf="@id/distance_medal"
+                            app:layout_constraintTop_toBottomOf="@id/distance_record"
+                            android:layout_marginTop="8dp"
+                            android:textSize="12dp"
+                            android:text="@={viewModel.medal}"
+                            android:hint="0개"/>
+                        
+                        <!--Recyclerview 바꿀 예정-->
+                        <ImageView
+                            android:id="@+id/distance_medal_images"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="@id/distance_begin"
+                            app:layout_constraintTop_toBottomOf="@id/distance_medal"
+                            android:src="@drawable/medal"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Activity Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/notice_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="800dp"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/home_border_shadow"
+                    android:elevation="4dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="하루하루"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

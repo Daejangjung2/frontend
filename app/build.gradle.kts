@@ -93,7 +93,7 @@ dependencies {
     // 이미지 처리
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
-    // 레트로핏 - 안쓸수도 있음
+    // 레트로핏
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:3.14.9")
@@ -118,4 +118,11 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation("com.kakao.maps.open:android:2.11.9")
+
+    //Glide
+    implementation("androidx.viewpager2:viewpager2:1.0.0-alpha04")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    implementation("androidx.cardview:cardview:1.0.0")
+
 }

@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.WindowInsetsController
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingActivity
@@ -41,8 +45,15 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
         binding.viewModel = viewModel
 
         onBackPressedDispatcher.addCallback(this, callback)
+
         setupObserve()
-        getHashKey();
+        setSystemUiVisibility()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 액티비티가 다시 화면에 보일 때도 설정 적용
+        setSystemUiVisibility()
     }
 
     private fun setupObserve() {
@@ -79,23 +90,25 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
         }
     }
 
-    private fun getHashKey() {
-        var packageInfo: PackageInfo? = null
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+    private fun setSystemUiVisibility() {
+        // 상태 바 색상 강제 설정
+        window.statusBarColor = ContextCompat.getColor(this, R.color.grey_F8F8F8)
+
+        // 상태 바 텍스트 색상 설정 (밝게)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
-        if (packageInfo == null) Log.e("KeyHash", "KeyHash:null")
-        for (signature in packageInfo!!.signatures) {
-            try {
-                val md = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            } catch (e: NoSuchAlgorithmException) {
-                Log.e("KeyHash", "Unable to get MessageDigest. signature=$signature", e)
-            }
-        }
+
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                )
     }
 
     companion object {

@@ -10,8 +10,8 @@
     </style>
 
     <style name="SignUpTextInputOutlinedBoxLayout" parent="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/vista_blue_80A1D4</item>
-        <item name="hintTextColor">@color/vista_blue_80A1D4</item>
+        <item name="boxStrokeColor">@color/vista_blue_469CFF</item>
+        <item name="hintTextColor">@color/vista_blue_469CFF</item>
         <item name="errorEnabled">true</item>
         <item name="helperTextEnabled">true</item>
         <item name="android:paddingTop">16dp</item>
