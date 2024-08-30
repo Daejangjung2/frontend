@@ -20,6 +20,7 @@ import com.example.daejangjung2.domain.model.Medal
 import com.example.daejangjung2.domain.model.Notice
 import com.example.daejangjung2.feature.main.home.banner.BannerAdapter
 import com.example.daejangjung2.feature.main.home.medal.MedalAdapter
+import com.example.daejangjung2.feature.main.home.notice.NoticeActivity
 import com.example.daejangjung2.feature.main.home.notice.NoticeRandomAdapter
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -50,15 +51,23 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun handleEvent(event: HomeViewModel.Event){
         when(event){
-            is HomeViewModel.Event.Failed -> Toaster.showShort(requireContext(), event.message)
             HomeViewModel.Event.Success -> Toaster.showShort(requireContext(), "성공하였습니다.")
+            is HomeViewModel.Event.Failed -> Toaster.showShort(requireContext(), event.message)
+            is HomeViewModel.Event.SelectNotice -> {
+                startActivity(NoticeActivity.getIntent(requireContext(), event.notice))
+            }
         }
     }
 
     private fun setBanner(banners: ArrayList<ImageBanner>){
         banner.currentItem=0
         banner.offscreenPageLimit=1
-        banner.adapter = BannerAdapter(requireContext(), banners)
+
+        val adapter = BannerAdapter(requireContext(), banners)
+        adapter.notifyDataSetChanged()
+
+        banner.adapter = adapter
+
 
         var currentPage = 0
         val handler = Handler()

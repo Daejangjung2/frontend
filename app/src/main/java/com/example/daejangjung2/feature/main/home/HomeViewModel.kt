@@ -36,14 +36,15 @@ class HomeViewModel : ViewModel() {
 
     fun noticeService(notice: Notice) {
         viewModelScope.launch {
-            _event.emit(Event.Failed(notice.comment))
+            _event.emit(Event.SelectNotice(notice))
         }
     }
 
 
 
     sealed class Event {
-        object Success : Event();
+        data class SelectNotice(val notice: Notice): Event();
+        data object Success : Event();
         data class Failed(val message: String) : Event();
     }
 

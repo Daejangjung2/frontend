@@ -92,7 +92,7 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
 
     private fun setSystemUiVisibility() {
         // 상태 바 색상 강제 설정
-        window.statusBarColor = ContextCompat.getColor(this, R.color.grey_F8F8F8)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.transparent)
 
         // 상태 바 텍스트 색상 설정 (밝게)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
