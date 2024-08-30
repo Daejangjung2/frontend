@@ -21,7 +21,7 @@ fun View.showSnackbar(
         }
         .setTextColor(resources.getColor(R.color.black_000000, null))
         .setActionTextColor(resources.getColor(R.color.black_000000, null))
-        .setBackgroundTint(resources.getColor(R.color.vista_blue_80A1D4, null))
+        .setBackgroundTint(resources.getColor(R.color.vista_blue_469CFF, null))
         .setAction(context.getString(actionId)) {
             action()
         }
@@ -40,7 +40,7 @@ fun View.showSnackbar(
         }
         .setTextColor(resources.getColor(R.color.black_000000, null))
         .setActionTextColor(resources.getColor(R.color.black_000000, null))
-        .setBackgroundTint(resources.getColor(R.color.vista_blue_80A1D4, null))
+        .setBackgroundTint(resources.getColor(R.color.vista_blue_469CFF, null))
         .setAction(actionMessage) {
             action()
         }
