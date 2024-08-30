@@ -8,13 +8,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingFragment
+import com.example.daejangjung2.common.view.Toaster
 import com.example.daejangjung2.databinding.FragmentHomeBinding
 import com.example.daejangjung2.domain.model.ImageBanner
+import com.example.daejangjung2.domain.model.Medal
+import com.example.daejangjung2.domain.model.Notice
 import com.example.daejangjung2.feature.main.home.banner.BannerAdapter
-import com.example.daejangjung2.feature.main.mypage.MyPageFragment
+import com.example.daejangjung2.feature.main.home.medal.MedalAdapter
+import com.example.daejangjung2.feature.main.home.notice.NoticeRandomAdapter
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels();
@@ -30,11 +36,23 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
 
         setupObserve()
-        viewModel.getBanner()
+        viewModel.getTestBanner()
+        viewModel.getTestMedal()
+        viewModel.getTestNotice()
     }
 
     private fun setupObserve(){
+        viewModel.event.observe(viewLifecycleOwner){ handleEvent(it) }
         viewModel.banner.observe(viewLifecycleOwner){ setBanner(it) }
+        viewModel.medal.observe(viewLifecycleOwner){ setMedal(it) }
+        viewModel.notice.observe(viewLifecycleOwner){ setNotice(it) }
+    }
+
+    private fun handleEvent(event: HomeViewModel.Event){
+        when(event){
+            is HomeViewModel.Event.Failed -> Toaster.showShort(requireContext(), event.message)
+            HomeViewModel.Event.Success -> Toaster.showShort(requireContext(), "성공하였습니다.")
+        }
     }
 
     private fun setBanner(banners: ArrayList<ImageBanner>){
@@ -66,6 +84,28 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         })
 
         setupIndicators(banners.size)
+    }
+
+    private fun setMedal(items: ArrayList<Medal>){
+        val medalList = binding.distanceMedalImages
+
+        val adapter = MedalAdapter(requireContext(),items)
+        adapter.notifyDataSetChanged()
+
+        medalList.adapter = adapter
+        medalList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    private fun setNotice(notices: List<Notice>){
+        val noticeList = binding.noticeHomeThumbnail
+
+        val adapter = NoticeRandomAdapter(requireContext(),notices, viewModel::noticeService)
+        adapter.notifyDataSetChanged()
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 1, GridLayoutManager.HORIZONTAL, false)
+        noticeList.layoutManager = gridLayoutManager
+
+        noticeList.adapter = adapter
     }
 
     private fun setupIndicators(count: Int) {
