@@ -9,21 +9,179 @@
             type="com.example.daejangjung2.feature.main.map.MapViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/map_container"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".feature.main.map.MapFragment">
+        android:layout_height="match_parent">
 
-        <com.kakao.vectormap.MapView
-            android:id="@+id/kakao_map"
+        <!-- 지도 및 버튼 레이아웃 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="visible"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:context=".feature.main.map.MapFragment">
+
+            <com.kakao.vectormap.MapView
+                android:id="@+id/kakao_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="visible"/>
+
+            <!-- Top Button Layout -->
+            <LinearLayout
+                android:id="@+id/top_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:elevation="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center">
+
+                <!-- 안내 Button -->
+                <LinearLayout
+                    android:id="@+id/btn_guide"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/button_background_selector"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="안내"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="8dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_guide_image"/>
+
+                </LinearLayout>
+
+                <!-- 날씨 Button -->
+                <LinearLayout
+                    android:id="@+id/btn_weather"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/button_background_selector"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="날씨"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="8dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_weather_image"/>
+
+                </LinearLayout>
+
+                <!-- 뉴스 Button -->
+                <LinearLayout
+                    android:id="@+id/btn_news"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/button_background_selector"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="뉴스"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="8dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_news_image"/>
+
+                </LinearLayout>
+
+                <!-- 컨텐츠 Button -->
+                <LinearLayout
+                    android:id="@+id/btn_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/button_background_selector"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="컨텐츠"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="8dp"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_content_image"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 바텀 시트 -->
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_bottomsheet"
+            android:elevation="4dp"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.5">
+
+            <!-- 드래그를 위한 핸들 -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:background="@drawable/rounded_corners"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- 뉴스 리스트를 담을 RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewNews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
