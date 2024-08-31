@@ -1,0 +1,11 @@
+<!-- Kakao icon would usually be custom or downloaded from a design library as vector drawable -->
+<!-- Placeholder for Kakao icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M12,2C6.48,2 2,5.58 2,10c0,2.64 1.69,4.98 4.25,6.34L4,22l4.74,-3.26C9.16,18.91 10.56,19 12,19c5.52,0 10,-3.58 10,-8S17.52,2 12,2z"/>
+</vector>
