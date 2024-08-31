@@ -11,7 +11,7 @@ object DistanceManager {
 
     /**
      * 두 좌표의 거리를 계산한다.
-     *
+     *     
      * @param lat1 위도1
      * @param lon1 경도1
      * @param lat2 위도2
