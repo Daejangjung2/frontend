@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +14,6 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,17 +37,28 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.MapType
 import com.kakao.vectormap.MapView
-import com.kakao.vectormap.MapViewInfo
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.route.RouteLineLayer
+import com.kakao.vectormap.route.RouteLineManager
+import com.kakao.vectormap.route.RouteLineOptions
+import com.kakao.vectormap.route.RouteLinePattern
+import com.kakao.vectormap.route.RouteLineSegment
+import com.kakao.vectormap.route.RouteLineStyle
+import com.kakao.vectormap.route.RouteLineStyles
+import com.kakao.vectormap.route.RouteLineStylesSet
+import java.util.Arrays
+
 
 class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var routeLineManager: RouteLineManager // RouteLineManager 추가
+    private lateinit var layer: RouteLineLayer;
+
 
     @SuppressLint("MissingPermission")
     private val locationResultLauncher: ActivityResultLauncher<Array<String>> =
@@ -78,7 +89,7 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         override fun onLocationResult(locationResult: LocationResult) {
             for (location in locationResult.locations) {
                 Log.d(
-                    DAEJANGJUNG, 
+                    DAEJANGJUNG,
                     "제공자: ${location.provider}, ${location.latitude}, ${location.longitude}",
                 )
                 viewModel.updateCurPosition(GeoPoint(location.latitude, location.longitude))
@@ -103,7 +114,7 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
 
         // 버튼 클릭 리스너 설정
         setupButtonListeners()
-        setupBottomSheet()
+        setupBottomSheet_news()
 
         checkLocationPermission()
         Maps.start(object: MapLifeCycleCallback(){
@@ -119,12 +130,99 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         }, object : KakaoMapReadyCallback(){
             override fun onMapReady(kakao: KakaoMap) {
                 kakaoMap = kakao
+                setupRouteLineManager(kakaoMap)
                 setupViewModel()
             }
             override fun getZoomLevel(): Int {
                 return 30
             }
         })
+    }
+
+    private fun setupRouteLineManager(kakaoMap: KakaoMap) {
+        // RouteLineManager 초기화
+//        routeLineManager = kakaoMap.getRouteLineManager(routeLineManager)
+//        kakaoMap = Map
+//        routeLineManager = kakaoMap.getRouteLineManager()
+        routeLineManager = kakaoMap.getRouteLineManager() ?: run {
+            Log.e("MapFragment", "RouteLineManager를 가져오는 데 실패했습니다.")
+            return
+        }
+
+//        layer = kakaoMap.getRouteLineManager().getLayer()
+        layer = routeLineManager.layer ?: run {
+            Log.e("MapFragment", "RouteLineLayer를 가져오는 데 실패했습니다.")
+            return
+        }
+
+        // 예시 경로 데이터 설정 (여기서 실제 경로 데이터를 넣을 수 있음)
+        val start = LatLng.from(37.5666805, 126.9784147) // 출발지 좌표 (예시)
+        val end = LatLng.from(37.5700457, 126.9828411) // 도착지 좌표 (예시)
+
+//        // 경로를 생성하고 지도에 그리기
+//        val routeOptions = routeLineManager.newOptions()
+//            .addPoint(start)
+//            .addPoint(end)
+//            .color(R.color.colorAccent) // 경로 색상 지정
+//
+//        routeLineManager.add(routeOptions.build())
+//        val stylesSet = RouteLineStylesSet.from(
+//            "blueStyles",
+//            RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
+//        )
+//
+//        val segment = RouteLineSegment.from(
+//            Arrays.asList(
+//                start, end
+//            )
+//        )
+//            .setStyles(stylesSet.getStyles(0))
+//
+//        val options = RouteLineOptions.from(segment)
+//            .setStylesSet(stylesSet)
+
+
+// 2. RouteLineStylesSet 을 생성
+        val styles1 = RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
+        val styles2 = RouteLineStyles.from(
+            RouteLineStyle.from(16f, Color.BLUE).setZoomLevel(10),
+            RouteLineStyle.from(20f, Color.GREEN, 1f, Color.WHITE).setZoomLevel(15)
+        )
+
+
+        val stylesSet = RouteLineStylesSet.from(styles1, styles2)
+
+        val ByLevel2 = Arrays.asList(
+            LatLng.from(37.394725518530834, 127.11015051307636),
+            LatLng.from(37.401928707331656, 127.10823557165544)
+        )
+
+
+// 3. RouteLineSegment 생성하기 - 세그먼트에 스타일 설정을 생략하면, RouteLineStylesSet 의 index 0 번째에 해당되는 스타일로 설정된다.
+        val segments: List<RouteLineSegment> = Arrays.asList(
+//            RouteLineSegment.from(ByLevel1, stylesSet.getStyles(0)),
+            RouteLineSegment.from(ByLevel2, stylesSet.getStyles(1)),
+//            RouteLineSegment.from(ByLevel3, stylesSet.getStyles(2)),
+//            RouteLineSegment.from(ByLevel4, stylesSet.getStyles(3)),
+//            RouteLineSegment.from(ByLevel5, stylesSet.getStyles(0)),
+//            RouteLineSegment.from(ByLevel6, stylesSet.getStyles(1)),
+//            RouteLineSegment.from(ByLevel7, stylesSet.getStyles(2))
+        )
+
+
+// 4. RouteLineStylesSet 을 추가하고 RouteLineOptions 생성하기
+        val options = RouteLineOptions.from(segments)
+            .setStylesSet(stylesSet)
+
+        val routeLine = layer.addRouteLine(options)
+
+        kakaoMap.moveCamera(CameraUpdateFactory.newCenterPosition(start, 15), CameraAnimation.from(500))
+
+//        val footRouteIntent = Intent(
+//            Intent.ACTION_VIEW,
+//            Uri.parse("kakaomap://route?sp=37.5666805,126.9784147&ep=37.5700457,126.9828411&by=FOOT")
+//        )
+//        startActivity(footRouteIntent)
     }
 
     override fun onStart() {
@@ -202,14 +300,14 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
     private fun handleGuideButtonClick() {
         // "안내" 버튼 클릭 시 수행할 동작
         // 예: 특정 안내 화면으로 이동
-        setVisible_bottomsheet()
+        setVisible_bottomsheet_news()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun handleWeatherButtonClick() {
         // "날씨" 버튼 클릭 시 수행할 동작
         // 예: 날씨 정보를 팝업으로 보여주기
-        setVisible_bottomsheet()
+        setVisible_bottomsheet_news()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
@@ -217,7 +315,7 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         // "뉴스" 버튼 클릭 시 수행할 동작
         // 예: 최신 뉴스 보여주기
         // 바텀시트를 보이도록 설정
-        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet)
+        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet_news)
         bottomSheet?.visibility = View.VISIBLE
 
         binding.recyclerViewNews.adapter = NewsAdapter(getNewsData())
@@ -230,12 +328,12 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
     private fun handleContentButtonClick() {
         // "컨텐츠" 버튼 클릭 시 수행할 동작
         // 예: 컨텐츠 화면으로 이동
-        setVisible_bottomsheet()
+        setVisible_bottomsheet_news()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun setupBottomSheet() {
-        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet)
+    private fun setupBottomSheet_news() {
+        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet_news)
         if (bottomSheet != null) {
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
@@ -380,8 +478,8 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
 
     data class NewsItem(val title: String, val content: String, val imageResId: Int)
 
-    private fun setVisible_bottomsheet() {
-        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet)
+    private fun setVisible_bottomsheet_news() {
+        val bottomSheet = view?.findViewById<LinearLayout>(R.id.bottom_sheet_news)
         bottomSheet?.visibility = View.GONE
     }
 
