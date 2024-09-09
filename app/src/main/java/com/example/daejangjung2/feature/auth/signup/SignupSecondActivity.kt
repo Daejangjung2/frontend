@@ -7,7 +7,7 @@ import com.example.daejangjung2.common.base.BindingActivity
 import com.example.daejangjung2.databinding.ActivitySignupSecondBinding
 
 class SignupSecondActivity : BindingActivity<ActivitySignupSecondBinding>(R.layout.activity_signup_second ) {
-    private val viewModel: SignUpViewModel by viewModels { SignUpViewModel.Factory }
+    private val viewModel: SignUpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = viewModel
