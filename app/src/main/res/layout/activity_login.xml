@@ -12,27 +12,174 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         tools:context=".feature.auth.login.LoginActivity">
 
-        <Button
+        <!-- Title: 로그인 -->
+        <TextView
+            android:id="@+id/tv_login_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:text="로그인"
-            android:onClick="@{()->vm.login()}"/>
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginTop="129dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        <ProgressBar
-            android:id="@+id/pb"
-            isVisible="@{vm.isLoading}"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/et_email"
+            android:hint=" 기존 ID | E-mail"
+            android:inputType="textEmailAddress"
+            android:layout_width="355dp"
+            android:layout_height="51dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="18dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:drawableLeft="@drawable/ic_email" />
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="355dp"
+            android:layout_height="51dp"
+            android:hint=" 비밀번호를 입력하세요."
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/et_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layout_continue_with"
+            android:layout_marginTop="21dp"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:drawableLeft="@drawable/ic_password" />
+
+        <LinearLayout
+            android:id="@+id/layout_continue_with"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="3"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/et_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#E8E8E8"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:text="Or continue with"
+                android:gravity="center_horizontal"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#E8E8E8"/>
+
+        </LinearLayout>
+
+
+
+        <!-- Kakao Login Button -->
+        <Button
+            android:id="@+id/btn_kakao_login"
+            android:layout_width="355dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@color/yellow_FFCB45"
+            android:text="카카오 로그인"
+            android:textColor="@android:color/black"
+            app:layout_constraintTop_toBottomOf="@id/et_password"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="54dp"
+            android:drawableLeft="@drawable/ic_kakao"
+            android:drawablePadding="8dp"
+            android:padding="12dp"/>
+        <!-- Find ID, Password, Signup -->
+        <TextView
+            android:id="@+id/tv_find_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디 찾기"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@id/tv_find_pw"
+            app:layout_constraintBottom_toBottomOf="@id/tv_find_pw"
+            app:layout_constraintEnd_toStartOf="@id/tv_first"/>
+
+        <TextView
+            android:id="@+id/tv_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" | "
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@id/tv_find_pw"
+            app:layout_constraintBottom_toBottomOf="@id/tv_find_pw"
+            app:layout_constraintEnd_toStartOf="@id/tv_find_pw" />
+
+        <TextView
+            android:id="@+id/tv_find_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 찾기"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/btn_kakao_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" | "
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@id/tv_find_pw"
+            app:layout_constraintBottom_toBottomOf="@id/tv_find_pw"
+            app:layout_constraintStart_toEndOf="@id/tv_find_pw"/>
+
+        <TextView
+            android:id="@+id/tv_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@id/tv_find_pw"
+            app:layout_constraintBottom_toBottomOf="@id/tv_find_pw"
+            app:layout_constraintStart_toEndOf="@id/tv_second"/>
+
+
+        <!-- Continue Button -->
+        <Button
+            android:id="@+id/btn_continue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="이어서 계속"
+            android:backgroundTint="@color/blue_468FF"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:layout_marginHorizontal="23dp"
+            android:layout_marginBottom="37dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
