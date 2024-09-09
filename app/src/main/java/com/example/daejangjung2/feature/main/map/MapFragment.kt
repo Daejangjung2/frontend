@@ -159,29 +159,6 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         val start = LatLng.from(37.5666805, 126.9784147) // 출발지 좌표 (예시)
         val end = LatLng.from(37.5700457, 126.9828411) // 도착지 좌표 (예시)
 
-//        // 경로를 생성하고 지도에 그리기
-//        val routeOptions = routeLineManager.newOptions()
-//            .addPoint(start)
-//            .addPoint(end)
-//            .color(R.color.colorAccent) // 경로 색상 지정
-//
-//        routeLineManager.add(routeOptions.build())
-//        val stylesSet = RouteLineStylesSet.from(
-//            "blueStyles",
-//            RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
-//        )
-//
-//        val segment = RouteLineSegment.from(
-//            Arrays.asList(
-//                start, end
-//            )
-//        )
-//            .setStyles(stylesSet.getStyles(0))
-//
-//        val options = RouteLineOptions.from(segment)
-//            .setStylesSet(stylesSet)
-
-
 // 2. RouteLineStylesSet 을 생성
         val styles1 = RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
         val styles2 = RouteLineStyles.from(
