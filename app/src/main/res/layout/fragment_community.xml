@@ -14,15 +14,132 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.main.community.CommunityFragment">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="홈"
-            android:textSize="32dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Top location section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Location Text -->
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@android:color/black" />
+
+            <!-- Location Subtext -->
+            <TextView
+                android:id="@+id/tv_location_subtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ahmedabad, Gujarat"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- Search bar -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_location_subtext">
+
+            <!-- Search input -->
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Search"
+                android:padding="12dp"
+                android:background="@drawable/community_search_bar_background"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@id/filter_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Filter button -->
+            <ImageView
+                android:id="@+id/filter_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/community_rounded_button_background"
+                android:padding="8dp"
+                android:src="@drawable/ic_filter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Filter Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/search_input"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="false">
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All"
+                        app:chipBackgroundColor="@color/chip_background_color"
+                        android:textColor="@color/black" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="제주자전거길"
+                        app:chipBackgroundColor="@color/chip_background_color"
+                        android:textColor="@color/black" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="섬진강자전거길"
+                        app:chipBackgroundColor="@color/chip_background_color"
+                        android:textColor="@color/black" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="아라자전거길"
+                        app:chipBackgroundColor="@color/chip_background_color"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- RecyclerView for Community Posts -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/communityRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/top_buttons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_community_post" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
