@@ -42,6 +42,49 @@
             android:exported="false"
             android:theme="@style/Base.Theme.Daejangjung2">
         </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginFirstActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginSecondActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginThirdActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginFourthActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginSecondActivity2"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupFirstActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupSecondActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupThirdActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupFourthActivity"
+            android:exported="false">
+        </activity>
+
+
     </application>
 
 </manifest>

@@ -16,6 +16,27 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         binding.vm = viewModel
         binding.lifecycleOwner = this
 
+        //아이디 찾기
+        binding.tvFindId.setOnClickListener {
+            val intent = Intent(this, LoginFirstActivity::class.java)
+            startActivity(intent)
+        }
+
+        //비밀번호 찾기
+        binding.tvFindPw.setOnClickListener {
+            val intent = Intent(this, LoginThirdActivity::class.java)
+            startActivity(intent)
+        }
+
+        //회원가입
+        binding.tvSignup.setOnClickListener {
+            val intent = Intent(this, SignupFirstActivity::class.java)
+            startActivity(intent)
+        }
+
+        if(viewModel.isLogin.value){
+
+        }
         setupObserve()
     }
 
