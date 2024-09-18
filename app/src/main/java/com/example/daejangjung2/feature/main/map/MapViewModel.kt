@@ -4,13 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.daejangjung2.common.livedata.SingleLiveEvent
 import com.example.daejangjung2.domain.model.GeoPoint
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class MapViewModel: ViewModel() {
-    private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
-    val event: LiveData<Event>
-        get() = _event
+    private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
+    val event: SharedFlow<Event>
+        get() = _event.asSharedFlow()
 
     private var updateCurPositionLoading: Boolean = false
 
@@ -40,6 +45,7 @@ class MapViewModel: ViewModel() {
         )
         visibleMapMinQuarterDistance = (listOf(widthDistance, heightDistance).min() / 8)
     }
+
     fun updateCurPosition(geoPoint: GeoPoint) {
         if (updateCurPositionLoading) return
         updateCurPositionLoading = true
@@ -64,8 +70,34 @@ class MapViewModel: ViewModel() {
         updateCurPositionLoading = false
     }
 
+    fun guideService(){
+        viewModelScope.launch {
+            _event.emit(Event.Service(ServiceType.GUIDE))
+        }
+    }
+
+    fun weatherService(){
+        viewModelScope.launch {
+            _event.emit(Event.Service(ServiceType.WEATHER))
+        }
+    }
+
+    fun newsService(){
+        viewModelScope.launch {
+            _event.emit(Event.Service(ServiceType.NEWS))
+        }
+    }
+
+    fun contentService(){
+        viewModelScope.launch {
+            _event.emit(Event.Service(ServiceType.CONTENT))
+        }
+    }
+
     sealed class Event {
         object Success: Event();
         data class Failed(val message: String): Event();
+
+        data class Service(val service: ServiceType): Event();
     }
 }

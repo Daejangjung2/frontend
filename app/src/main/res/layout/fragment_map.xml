@@ -57,7 +57,8 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:background="@drawable/button_background_selector"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:onClick="@{()->viewModel.guideService()}">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -83,7 +84,8 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:background="@drawable/button_background_selector"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:onClick="@{()->viewModel.weatherService()}">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,7 +111,8 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:background="@drawable/button_background_selector"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:onClick="@{()->viewModel.newsService()}">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -135,7 +138,8 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:background="@drawable/button_background_selector"
-                    android:layout_marginEnd="8dp">
+                    android:layout_marginEnd="8dp"
+                    android:onClick="@{()->viewModel.contentService()}">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -152,36 +156,6 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- 바텀 시트 -->
-        <LinearLayout
-            android:id="@+id/bottom_sheet_news"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_bottomsheet"
-            android:elevation="4dp"
-            android:visibility="gone"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.5">
-
-            <!-- 드래그를 위한 핸들 -->
-            <View
-                android:layout_width="40dp"
-                android:layout_height="4dp"
-                android:background="@drawable/rounded_corners"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="8dp"/>
-
-            <!-- 뉴스 리스트를 담을 RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewNews"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"/>
-        </LinearLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
