@@ -3,14 +3,11 @@ package com.example.daejangjung2.feature.main.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.LocationManager
-import android.net.Uri
+import com.google.android.gms.location.LocationRequest
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -20,18 +17,16 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingFragment
+import com.example.daejangjung2.common.util.LocationUtils
 import com.example.daejangjung2.common.view.Toaster
 import com.example.daejangjung2.common.view.showSnackbar
 import com.example.daejangjung2.databinding.FragmentMapBinding
 import com.example.daejangjung2.domain.model.GeoPoint
-import com.example.daejangjung2.domain.model.NewsInfo
 import com.example.daejangjung2.feature.main.map.newsInfo.NewsFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -39,71 +34,43 @@ import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.Label
 import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
-import com.kakao.vectormap.route.RouteLineLayer
-import com.kakao.vectormap.route.RouteLineManager
-import com.kakao.vectormap.route.RouteLineOptions
-import com.kakao.vectormap.route.RouteLineSegment
-import com.kakao.vectormap.route.RouteLineStyle
-import com.kakao.vectormap.route.RouteLineStyles
-import com.kakao.vectormap.route.RouteLineStylesSet
-import java.util.Arrays
+import com.kakao.vectormap.label.TrackingManager
+import com.kakao.vectormap.label.TransformMethod
+import com.kakao.vectormap.shape.DotPoints
+import com.kakao.vectormap.shape.Polygon
+import com.kakao.vectormap.shape.PolygonOptions
+import com.kakao.vectormap.shape.PolygonStyles
+import com.kakao.vectormap.shape.PolygonStylesSet
 
 
 class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
-    @SuppressLint("MissingPermission")
-    private val locationResultLauncher: ActivityResultLauncher<Array<String>> =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions(),
-        ) { permissions ->
-            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-                requestLocationUpdateService()
-                return@registerForActivityResult
-            }
-            if (permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
-                requestLocationUpdateService()
-                showSnackBar(R.string.map_location_permission_upgrade_require_message) { navigateToPermissionSetting() }
-            } else {
-                showSnackBar(R.string.map_location_permission_require_message) { navigateToPermissionSetting() }
-            }
-        }
+
     private val viewModel: MapViewModel by viewModels()
-
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var kakaoMap: KakaoMap
+    private lateinit var Maps: MapView
+    private lateinit var trackingManager: TrackingManager
+    private var locationLabel: Label? = null
+    private var headingLabel: Label? = null
+    private var circleWavePolygon: Polygon? = null
 
-    private val locationRequest = LocationRequest.create().apply {
-        interval = 15000000
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-
-    private lateinit var routeLineManager: RouteLineManager // RouteLineManager 추가
-
-    private lateinit var layer: RouteLineLayer;
-
-    private val locationCallback: LocationCallback = object : LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (location in locationResult.locations) {
-                Log.d(
-                    DAEJANGJUNG,
-                    "제공자: ${location.provider}, ${location.latitude}, ${location.longitude}",
-                )
+                Log.d(DAEJANGJUNG, "제공자: ${location.provider}, ${location.latitude}, ${location.longitude}")
                 viewModel.updateCurPosition(GeoPoint(location.latitude, location.longitude))
                 break
             }
         }
     }
 
-    private lateinit var kakaoMap: KakaoMap;
-
-    private lateinit var Maps: MapView;
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -111,22 +78,22 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         binding.viewModel = viewModel
         Maps = binding.kakaoMap;
 
-        checkLocationPermission()
-
         Maps.start(object : MapLifeCycleCallback() {
             override fun onMapDestroy() {
-                TODO("Not yet implemented")
             }
 
             override fun onMapError(error: java.lang.Exception?) {
-                // 인증 실패 및 지도 사용 중 에러 발생 시 호출됨
                 error?.printStackTrace()
             }
 
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(kakao: KakaoMap) {
                 kakaoMap = kakao
-//                setupRouteLineManager(kakaoMap)
+
+                kakaoMap.compass?.show()
+
+                trackingManager = kakaoMap.trackingManager!!
+
                 setupViewModel()
             }
 
@@ -136,138 +103,42 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         })
     }
 
-    private fun setupRouteLineManager(kakaoMap: KakaoMap) {
-        routeLineManager = kakaoMap.getRouteLineManager() ?: run {
-            Log.e("MapFragment", "RouteLineManager를 가져오는 데 실패했습니다.")
-            return
-        }
-
-        layer = routeLineManager.layer ?: run {
-            Log.e("MapFragment", "RouteLineLayer를 가져오는 데 실패했습니다.")
-            return
-        }
-
-        // 예시 경로 데이터 설정 (여기서 실제 경로 데이터를 넣을 수 있음)
-        val start = LatLng.from(37.5666805, 126.9784147) // 출발지 좌표 (예시)
-        val end = LatLng.from(37.5700457, 126.9828411) // 도착지 좌표 (예시)
-
-        // 2. RouteLineStylesSet 을 생성
-        val styles1 = RouteLineStyles.from(RouteLineStyle.from(16f, Color.BLUE))
-        val styles2 = RouteLineStyles.from(
-            RouteLineStyle.from(16f, Color.BLUE).setZoomLevel(10),
-            RouteLineStyle.from(20f, Color.GREEN, 1f, Color.WHITE).setZoomLevel(15)
-        )
-
-
-        val stylesSet = RouteLineStylesSet.from(styles1, styles2)
-
-        val ByLevel2 = Arrays.asList(
-            LatLng.from(37.394725518530834, 127.11015051307636),
-            LatLng.from(37.401928707331656, 127.10823557165544)
-        )
-
-
-// 3. RouteLineSegment 생성하기 - 세그먼트에 스타일 설정을 생략하면, RouteLineStylesSet 의 index 0 번째에 해당되는 스타일로 설정된다.
-        val segments: List<RouteLineSegment> = Arrays.asList(
-            RouteLineSegment.from(ByLevel2, stylesSet.getStyles(1)),
-        )
-
-
-// 4. RouteLineStylesSet 을 추가하고 RouteLineOptions 생성하기
-        val options = RouteLineOptions.from(segments)
-            .setStylesSet(stylesSet)
-
-        val routeLine = layer.addRouteLine(options)
-
-        kakaoMap.moveCamera(
-            CameraUpdateFactory.newCenterPosition(start, 21),
-            CameraAnimation.from(500)
-        )
-    }
-
     override fun onStart() {
+        checkLocationPermission()
+
+        if (LocationUtils.isLocationPermissionGranted(requireContext())) {
+            val locationRequest = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                LocationRequest.Builder(1000).build()
+            } else {
+                LocationRequest.create().apply {
+                    interval = 1000
+                    fastestInterval = 500
+                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                }
+            }
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        }
         super.onStart()
-        requestLocationUpdateService()
     }
 
     override fun onStop() {
+        Maps.pause()
+        stopLocationUpdate()
         super.onStop()
+    }
+
+    private fun stopLocationUpdate(){
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
-    override fun onResume() {
-        super.onResume()
-        Maps.resume();
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Maps.pause();
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun requestLocationUpdateService() {
-        if (isAllowedLocationPermission().not()) return
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper(),
-        )
-    }
-
-    // 위치 권한 관련 로직들
-    private fun isAllowedLocationPermission(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return false
-        }
-        return true
-    }
-
     private fun checkLocationPermission() {
-        if (checkLocationService().not()) {
-            showToast(R.string.map_location_service_turn_on_require_message)
+        val requestList = permissions.filter {
+            ActivityCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED
         }
 
-        // 둘 중에 한 개도 부여된 것이 없다면,,
-        if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            requireActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                showSnackBar(R.string.map_location_permission_require_message) { navigateToPermissionSetting() }
-            } else {
-                locationResultLauncher.launch(REQUIRE_LOCATION_PERMISSIONS)
-            }
-        } else {
-            if (requireActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-                showSnackBar(R.string.map_location_permission_upgrade_require_message) { navigateToPermissionSetting() }
-            }
+        if (requestList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(requireActivity(), requestList.toTypedArray(), PERMISSIONS_REQUEST_CODE)
         }
-    }
-
-    private fun navigateToPermissionSetting() {
-        Intent().apply {
-            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            data = Uri.fromParts("package", requireActivity().packageName, null)
-            startActivity(this)
-        }
-    }
-
-    // GPS가 켜져있는지 확인
-    private fun checkLocationService(): Boolean {
-        val locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     private fun showSnackBar(@StringRes messageId: Int, action: () -> Unit) {
@@ -283,16 +154,34 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
             point?.let {
                 val lat = it.latitude;
                 val lon = it.longitude;
+                val position = LatLng.from(lat, lon)
                 val camera = CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lon),17)
                 kakaoMap.moveCamera(camera, CameraAnimation.from(500, true, true));
-                val styles =
-                    kakaoMap?.labelManager?.addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.ic_navigate)))
+                val labelLayer = kakaoMap.labelManager?.layer
+                locationLabel = labelLayer?.addLabel(
+                    LabelOptions.from(position).setRank(10)
+                        .setStyles(LabelStyles.from(LabelStyle.from(R.drawable.current_location)
+                            .setAnchorPoint(0.5f, 0.5f)))
+                        .setTransform(TransformMethod.AbsoluteRotation_Decal)
+                )
 
-                val options = LabelOptions.from(LatLng.from(lat, lon)).setStyles(styles);
+                headingLabel = labelLayer?.addLabel(
+                    LabelOptions.from(position).setRank(9)
+                        .setStyles(LabelStyles.from(LabelStyle.from(R.drawable.red_direction_area)
+                            .setAnchorPoint(0.5f, 1.0f)))
+                        .setTransform(TransformMethod.AbsoluteRotation_Decal)
+                )
 
-                val layer = kakaoMap.labelManager?.getLayer();
+                locationLabel?.addSharePosition(headingLabel)
 
-                layer?.addLabel(options);
+                circleWavePolygon = kakaoMap.shapeManager?.layer?.addPolygon(
+                    PolygonOptions.from("circlePolygon")
+                        .setVisible(false)
+                        .setDotPoints(DotPoints.fromCircle(position, 1.0f))
+                        .setStylesSet(PolygonStylesSet.from(PolygonStyles.from(Color.parseColor("#f55d44"))))
+                )
+
+                locationLabel?.addShareTransform(circleWavePolygon)
             }
         }
 
@@ -327,13 +216,10 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
     }
 
     companion object {
-        private const val REQUEST_CODE: Int = 1
+        private const val PERMISSIONS_REQUEST_CODE = 100
         private const val MAP_NEWS_INFO_TAG = "fragment_map_news_info_tag"
         private const val DAEJANGJUNG: String = "DAJANGJUNG"
-        private val REQUIRE_LOCATION_PERMISSIONS = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        )
+        private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         @JvmStatic
         fun newInstance() = MapFragment()
