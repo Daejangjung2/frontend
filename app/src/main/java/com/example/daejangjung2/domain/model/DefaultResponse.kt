@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class DefaultResponse<T:Any>(
     val message: String,
     val code: Int,
-    val data: List<T>,
+    val data: T,
     val success: Boolean,
 )

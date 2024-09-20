@@ -125,4 +125,6 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
     implementation("androidx.cardview:cardview:1.0.0")
 
+    implementation("com.kakao.sdk:v2-user:2.0.1")
+
 }

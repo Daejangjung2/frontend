@@ -1,6 +1,5 @@
 package com.example.daejangjung2.feature.main.map.guide
 
-import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import com.example.daejangjung2.domain.model.GeoPoint
@@ -9,12 +8,10 @@ import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.route.RouteLineLayer
 import com.kakao.vectormap.route.RouteLineManager
 import com.kakao.vectormap.route.RouteLineOptions
-import com.kakao.vectormap.route.RouteLinePattern
 import com.kakao.vectormap.route.RouteLineSegment
 import com.kakao.vectormap.route.RouteLineStyle
 import com.kakao.vectormap.route.RouteLineStyles
 import com.kakao.vectormap.route.RouteLineStylesSet
-import java.util.Arrays
 
 class InformationMarker {
     private lateinit var routeLineManager: RouteLineManager // RouteLineManager 추가
