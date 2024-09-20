@@ -7,10 +7,12 @@ import androidx.activity.viewModels
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingActivity
 import com.example.daejangjung2.databinding.ActivityLoginBinding
+import com.example.daejangjung2.feature.auth.signup.SignupFirstActivity
 import com.example.daejangjung2.feature.main.MainActivity
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login ) {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = viewModel
