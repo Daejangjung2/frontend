@@ -61,7 +61,6 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (location in locationResult.locations) {
-                Log.d(DAEJANGJUNG, "제공자: ${location.provider}, ${location.latitude}, ${location.longitude}")
                 viewModel.updateCurPosition(GeoPoint(location.latitude, location.longitude))
                 break
             }
@@ -80,10 +79,16 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
 
         Maps.start(object : MapLifeCycleCallback() {
             override fun onMapDestroy() {
+                Maps.finish()
             }
 
             override fun onMapError(error: java.lang.Exception?) {
                 error?.printStackTrace()
+            }
+
+            override fun onMapPaused() {
+                super.onMapPaused()
+                Maps.pause()
             }
 
         }, object : KakaoMapReadyCallback() {
@@ -103,7 +108,10 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         })
     }
 
-    override fun onStart() {
+    override fun onResume() {
+        super.onResume()
+        Maps.resume()
+
         checkLocationPermission()
 
         if (LocationUtils.isLocationPermissionGranted(requireContext())) {
@@ -118,13 +126,17 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
             }
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
-        super.onStart()
     }
 
-    override fun onStop() {
+    override fun onPause() {
+        super.onPause()
         Maps.pause()
         stopLocationUpdate()
-        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Maps.finish()
     }
 
     private fun stopLocationUpdate(){
@@ -141,14 +153,6 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
         }
     }
 
-    private fun showSnackBar(@StringRes messageId: Int, action: () -> Unit) {
-        binding.root.showSnackbar(messageId) { action() }
-    }
-
-    private fun showToast(@StringRes messageId: Int) {
-        Toaster.showShort(requireContext(), requireContext().getString(messageId))
-    }
-
     private fun setupViewModel() {
         viewModel.lastUserPoint.observe(viewLifecycleOwner) { point ->
             point?.let {
@@ -157,6 +161,7 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map) {
                 val position = LatLng.from(lat, lon)
                 val camera = CameraUpdateFactory.newCenterPosition(LatLng.from(lat, lon),17)
                 kakaoMap.moveCamera(camera, CameraAnimation.from(500, true, true));
+
                 val labelLayer = kakaoMap.labelManager?.layer
                 locationLabel = labelLayer?.addLabel(
                     LabelOptions.from(position).setRank(10)

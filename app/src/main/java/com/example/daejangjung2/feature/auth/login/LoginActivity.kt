@@ -16,14 +16,23 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         binding.vm = viewModel
         binding.lifecycleOwner = this
 
-        if(viewModel.isLogin.value){
-            login()
-        }
+        setupObserve()
     }
 
-    private fun login(){
-        startActivity(MainActivity.getIntent(this@LoginActivity))
-        finish()
+    private fun setupObserve(){
+
+        viewModel.event.observe(this){handleEvent(it)}
+    }
+
+    private fun handleEvent(event: LoginViewModel.Event){
+        when(event){
+            LoginViewModel.Event.InputBlank -> TODO()
+            is LoginViewModel.Event.LoginFailed -> TODO()
+            LoginViewModel.Event.LoginSuccess -> {
+                startActivity(MainActivity.getIntent(this@LoginActivity))
+                finish()
+            }
+        }
     }
 
     companion object {

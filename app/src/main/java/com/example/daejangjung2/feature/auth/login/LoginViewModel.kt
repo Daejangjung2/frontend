@@ -54,7 +54,7 @@ class LoginViewModel(
                 return@launch
             }
 
-            when (val response = authRepository.login("test1234", "test1234")) {
+            when (val response = authRepository.login("test1234@naver.com", "test1234")) {
                 is ApiResponse.Success -> {
                     _event.emit(Event.LoginSuccess)
                 }
