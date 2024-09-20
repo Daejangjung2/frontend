@@ -7,7 +7,7 @@ interface AuthRepository {
     val isLogin: Boolean
     suspend fun login(id: String, pwd: String): ApiResponse<Token>
     fun getToken(): Token
-    fun refreshToken()
+    suspend fun refreshToken()
     fun removeToken()
     fun updateToken(token: Token)
 }

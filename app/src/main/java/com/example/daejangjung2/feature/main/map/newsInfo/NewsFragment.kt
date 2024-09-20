@@ -15,7 +15,7 @@ class NewsFragment : BottomSheetDialogFragment() {
     private val binding: FragmentNewsBinding
         get() = _binding!!
 
-    private val viewModel: NewsViewModel by viewModels()
+    private val viewModel: NewsViewModel by viewModels{ NewsViewModel.Factory }
 
     private lateinit var newsInfoAdapter: NewsInfoAdapter
 
