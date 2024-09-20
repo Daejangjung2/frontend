@@ -20,12 +20,12 @@ class DefaultAuthRepository(
     override val isLogin: Boolean
         get() = localAuthDataSource.isLogin();
 
-    override suspend fun login(id: String, pwd: String): ApiResponse<Token> {
+    override suspend fun login(email: String, pwd: String): ApiResponse<Token> {
         return withContext(dispatcher) {
             val response = networkAuthDataSource.login(
                 LoginRequest(
-                    id = id,
-                    pw = pwd,
+                    email = email,
+                    password = pwd,
                 ),
             )
 
