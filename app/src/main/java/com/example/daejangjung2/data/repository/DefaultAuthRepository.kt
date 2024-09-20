@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.daejangjung2.data.datasource.local.LocalAuthDataSource
 import com.example.daejangjung2.data.datasource.network.NetworkAuthDataSource
 import com.example.daejangjung2.data.model.request.LoginRequest
+import com.example.daejangjung2.data.model.request.RefreshTokenRequest
 import com.example.daejangjung2.data.model.response.Token
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.repository.AuthRepository
@@ -48,8 +49,15 @@ class DefaultAuthRepository(
     }
 
     // 토큰을 갱신하는데 사용
-    override fun refreshToken() {
-        // TODO
+    override suspend fun refreshToken() {
+        withContext(dispatcher){
+            val token = networkAuthDataSource.refresh(
+                RefreshTokenRequest(
+                    token = getToken().accessToken
+                )
+            )
+            localAuthDataSource.updateToken(token)
+        }
     }
 
     override fun removeToken() {

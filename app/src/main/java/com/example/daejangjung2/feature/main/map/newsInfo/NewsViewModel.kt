@@ -2,10 +2,16 @@ package com.example.daejangjung2.feature.main.map.newsInfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.daejangjung2.R
+import com.example.daejangjung2.app.DaejangjungApplication
 import com.example.daejangjung2.common.livedata.SingleLiveEvent
+import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.model.NewsInfo
+import com.example.daejangjung2.domain.repository.MapRepository
+import com.example.daejangjung2.feature.auth.login.LoginViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,7 +20,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class NewsViewModel:ViewModel() {
+class NewsViewModel(
+    private val mapRepository: MapRepository
+):ViewModel() {
 
     private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
     val event: LiveData<Event>
@@ -39,7 +47,32 @@ class NewsViewModel:ViewModel() {
                 // 더 많은 뉴스 항목 추가 가능
             )
 
+            when(val response = mapRepository.news("동작구",1)){
+                is ApiResponse.Success -> {
+
+
+                }
+                is ApiResponse.Failure -> TODO()
+                else ->{
+
+                }
+            }
+
             _news.value = newData
+        }
+    }
+
+    companion object{
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras,
+            ): T {
+                return NewsViewModel(
+                    DaejangjungApplication.container.mapRepository,
+                ) as T
+            }
         }
     }
 }
