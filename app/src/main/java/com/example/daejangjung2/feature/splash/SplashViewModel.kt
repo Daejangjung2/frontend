@@ -27,7 +27,7 @@ class SplashViewModel(private val authRepository: AuthRepository): ViewModel() {
         viewModelScope.launch {
             delay(2000)
             val isLogin = authRepository.isLogin
-            if(!isLogin){
+            if(isLogin){
                 _event.emit(Event.NavigateToMain)
             }
             else{

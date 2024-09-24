@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.konan.properties.Properties
+import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 
 plugins {
     id("com.android.application")
@@ -124,6 +125,26 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
     implementation("androidx.cardview:cardview:1.0.0")
+
+    //웹소켓
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+
+    val nav_version = "2.8.0"
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
+
+    // Feature module support for Fragments
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     implementation("com.kakao.sdk:v2-user:2.0.1")
 

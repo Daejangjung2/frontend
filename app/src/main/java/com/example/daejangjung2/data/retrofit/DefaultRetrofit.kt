@@ -69,6 +69,7 @@ class DefaultRetrofit {
             }
 
         private fun Request.putTokenHeader(token: String): Request {
+            Log.d("writepost", "token : ${token}")
             return this.newBuilder()
                 .addHeader(AUTHORIZATION, "Bearer "+token)
                 .build()

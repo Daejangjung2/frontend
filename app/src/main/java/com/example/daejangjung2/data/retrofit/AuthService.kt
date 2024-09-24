@@ -4,8 +4,13 @@ import com.example.daejangjung2.data.model.request.LoginRequest
 import com.example.daejangjung2.data.model.request.RefreshTokenRequest
 import com.example.daejangjung2.data.model.response.Token
 import com.example.daejangjung2.domain.model.ApiResponse
+import com.example.daejangjung2.feature.main.community.AuthResponse
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthService {
     @POST("/api/login/auth/signin")
@@ -17,4 +22,10 @@ interface AuthService {
     suspend fun refresh(
         @Body token: RefreshTokenRequest
     ): Token
+}
+
+interface AuthServiceToken {
+    @GET("/api/Login/auth/signup/{loginEmail}")
+    suspend fun getToken(@Path("loginEmail") loginEmail: String
+    ): Response<AuthResponse>
 }
