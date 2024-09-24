@@ -51,7 +51,9 @@ class NewsViewModel(
                 is ApiResponse.Success -> {
 
                 }
-                is ApiResponse.Failure -> TODO()
+                is ApiResponse.Failure -> {
+
+                }
                 else ->{
 
                 }

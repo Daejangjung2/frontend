@@ -7,7 +7,7 @@
         </trust-anchors>
     </base-config>
     <domain-config>
-        <domain includeSubdomains="true">43.201.170.204:8080</domain>
+        <domain includeSubdomains="true">djj2.site</domain>
         <trust-anchors>
             <certificates src="@raw/cert" />
         </trust-anchors>

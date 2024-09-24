@@ -2,6 +2,7 @@ package com.example.daejangjung2.data.datasource.local
 
 import android.content.SharedPreferences
 import com.example.daejangjung2.data.model.response.Token
+import kotlinx.coroutines.runBlocking
 
 class LocalAuthDataSource(private val sharedPref: SharedPreferences) {
     fun getToken(): Token {

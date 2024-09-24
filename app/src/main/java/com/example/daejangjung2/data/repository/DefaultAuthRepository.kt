@@ -19,7 +19,29 @@ class DefaultAuthRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ): AuthRepository {
     override val isLogin: Boolean
-        get() = localAuthDataSource.isLogin();
+        get() = runBlocking {
+            checkLoginStatus()
+        };
+
+    // 토큰 상태를 확인하고 갱신하는 로직
+    private suspend fun checkLoginStatus(): Boolean {
+        val token = localAuthDataSource.getToken()
+
+        // accessToken이 없으면 로그인 상태가 아님
+        if (token.accessToken.isEmpty()) {
+            return false
+        }
+
+        // 토큰이 만료되었을 경우 refreshToken 시도
+        return try {
+            val newToken = networkAuthDataSource.refresh(RefreshTokenRequest(token.refreshToken))
+            localAuthDataSource.updateToken(newToken)
+            true
+        } catch (e: Exception) {
+            Log.e(HTTP_LOG_TAG, "Token refresh failed", e)
+            false
+        }
+    }
 
     override suspend fun login(email: String, pwd: String): ApiResponse<Token> {
         return withContext(dispatcher) {
@@ -53,7 +75,7 @@ class DefaultAuthRepository(
         withContext(dispatcher){
             val token = networkAuthDataSource.refresh(
                 RefreshTokenRequest(
-                    token = getToken().accessToken
+                    token = getToken().refreshToken
                 )
             )
             localAuthDataSource.updateToken(token)
