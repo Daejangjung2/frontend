@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.daejangjung2.feature.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_FFFFFF"
+        tools:context=".feature.main.MainActivity">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/bnv_main"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            layout="@layout/view_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bnv_main" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_main"
+            onNavigationItemSelected="@{viewModel.changeScreen}"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:backgroundTint="@color/white_FFFFFF"
+            app:itemActiveIndicatorStyle="@color/transparent"
+            app:itemBackground="@color/transparent"
+            app:itemIconTint="@color/grey_800_to_navigation_active_checked"
+            app:itemPaddingBottom="5dp"
+            app:itemPaddingTop="6dp"
+            app:itemTextColor="@color/grey_800_to_navigation_active_checked"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom_navigation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
