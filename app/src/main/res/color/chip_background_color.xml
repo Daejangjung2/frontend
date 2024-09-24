@@ -1,10 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 선택된 상태의 배경색 -->
     <item android:state_checked="true" android:color="@color/chip_selected_color" />
-
-    <!-- 비활성화된 상태의 배경색 -->
-    <item android:state_enabled="false" android:color="@color/chip_disabled_color" />
-
-    <!-- 기본 상태의 배경색 -->
-    <item android:color="@color/chip_default_color" />
+    <item android:state_checked="false" android:color="@color/chip_disabled_color" />
 </selector>

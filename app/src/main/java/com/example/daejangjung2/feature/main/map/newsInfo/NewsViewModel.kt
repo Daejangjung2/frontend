@@ -50,7 +50,6 @@ class NewsViewModel(
             when(val response = mapRepository.news("동작구",1)){
                 is ApiResponse.Success -> {
 
-
                 }
                 is ApiResponse.Failure -> TODO()
                 else ->{
