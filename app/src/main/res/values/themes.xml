@@ -2,9 +2,10 @@
     <!-- splash 를 활용한 것: 스타일 이름은 고정이여야 함 -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white_FFFFFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
         <item name="android:statusBarColor">@color/grey_F8F8F8</item>
-        <item name="android:background">@drawable/gradient_background</item>
+        <item name="android:background">@color/white_FFFFFF</item>
         <!-- splash 화면 이후 연결해줄 내 앱의 테마 스타일 -->
         <item name="postSplashScreenTheme">@style/Base.Theme.Daejangjung2</item>
     </style>
