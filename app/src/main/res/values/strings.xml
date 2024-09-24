@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Daejangjung2</string>
+    <string name="app_name">대장정이</string>
     <string name="all_network_check_please_message">인터넷 연결을 확인해주세요</string>
     <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
     <string name="all_snackbar_default_action">확인</string>

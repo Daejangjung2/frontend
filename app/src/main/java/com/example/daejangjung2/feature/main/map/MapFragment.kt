@@ -20,6 +20,7 @@ import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingFragment
 import com.example.daejangjung2.common.util.LocationUtils
 import com.example.daejangjung2.common.view.Toaster
+import com.example.daejangjung2.data.model.response.WeatherResponse
 import com.example.daejangjung2.databinding.FragmentMapBinding
 import com.example.daejangjung2.domain.model.GeoPoint
 import com.example.daejangjung2.feature.main.map.guide.InformationMarker
@@ -52,7 +53,7 @@ import com.kakao.vectormap.shape.PolygonStylesSet
 class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map),
     SensorEventListener {
 
-    private val viewModel: MapViewModel by viewModels()
+    private val viewModel: MapViewModel by viewModels { MapViewModel.Factory }
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var kakaoMap: KakaoMap
     private lateinit var Maps: MapView
@@ -212,14 +213,15 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map),
         locationLabel?.addShareTransform(circleWavePolygon)
     }
 
-    private fun showToast(@StringRes messageId: Int) {
-        Toaster.showShort(requireContext(), requireContext().getString(messageId))
-    }
-
     private fun setObserve(){
         viewModel.event.observe(viewLifecycleOwner) { event ->
             handleEvent(event)
         }
+        viewModel.weather.observe(viewLifecycleOwner){ setWeather(it) }
+    }
+
+    private fun setWeather(weather: WeatherResponse){
+        Toaster.showShort(requireContext(), weather.humidity)
     }
 
     private fun handleEvent(event: MapViewModel.Event) {
