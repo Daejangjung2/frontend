@@ -27,4 +27,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="base_purple">#664FA2</color>
     <color name="second_purple">#A086E6</color>
+
+    <color name="chip_selected_color">#469CFF</color>
+    <color name="chip_disabled_color">#E5E5E5</color>
+    <color name="chip_default_color">#E5E5E5</color>
+
+    <color name="blue__">#469CFF</color>
+
 </resources>

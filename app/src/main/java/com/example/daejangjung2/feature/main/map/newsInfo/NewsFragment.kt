@@ -16,7 +16,6 @@ class NewsFragment : BottomSheetDialogFragment() {
         get() = _binding!!
 
     private val viewModel: NewsViewModel by viewModels{ NewsViewModel.Factory }
-
     private lateinit var newsInfoAdapter: NewsInfoAdapter
 
     override fun onCreateView(

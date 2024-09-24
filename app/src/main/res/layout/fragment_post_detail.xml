@@ -1,0 +1,57 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="post"
+            type="com.example.daejangjung2.data.model.response.PostCallAllResponse" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="0dp">
+
+        <!-- 이미지 뷰 -->
+        <ImageView
+            android:id="@+id/postImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <!-- 제목 -->
+        <TextView
+            android:id="@+id/postTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="@{post.title != null ? post.title : `제목 없음`}"
+            tools:text="게시물 제목" />
+
+        <!-- 위치 -->
+        <TextView
+            android:id="@+id/postLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:text="@{post.location != null ? post.location : `위치 정보 없음`}"
+            tools:text="위치" />
+
+        <!-- 내용 -->
+        <TextView
+            android:id="@+id/postContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:text="@{post.contents != null ? post.contents : `내용 없음`}"
+            tools:text="게시물 내용" />
+
+    </LinearLayout>
+</layout>
