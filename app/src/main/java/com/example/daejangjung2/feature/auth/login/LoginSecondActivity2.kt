@@ -13,6 +13,7 @@ import com.example.daejangjung2.databinding.ActivityLoginSecond2Binding
 import com.example.daejangjung2.databinding.ActivityLoginSecondBinding
 import com.example.daejangjung2.feature.main.MainActivity
 
+
 class LoginSecondActivity2 : BindingActivity<ActivityLoginSecond2Binding>(R.layout.activity_login_second2 ) {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory }
 

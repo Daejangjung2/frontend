@@ -4,7 +4,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingActivity
@@ -12,46 +14,44 @@ import com.example.daejangjung2.databinding.ActivityLoginBinding
 import com.example.daejangjung2.databinding.ActivityLoginThirdBinding
 import com.example.daejangjung2.feature.main.MainActivity
 
-class LoginThirdActivity : BindingActivity<ActivityLoginThirdBinding>(R.layout.activity_login_third ) {
-    private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory }
+class LoginThirdActivity : BindingActivity<ActivityLoginThirdBinding>(R.layout.activity_login_third) {
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.vm = viewModel
         binding.lifecycleOwner = this
 
-        // 모든 입력 필드에 대해 텍스트 변경 리스너를 추가
-        binding.etIdEmail.addTextChangedListener { checkFieldsForEmptyValues() }
+        binding.etIdEmail.addTextChangedListener {
+            viewModel.email.value = it.toString().trim()
+        }
+
+        viewModel.formState.observe(this) { formState ->
+            when (formState) {
+                is LoginViewModel.FormState.Correct -> {
+                    binding.btnContinue.isEnabled = true
+                    binding.btnContinue.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_468FF))
+                }
+                is LoginViewModel.FormState.Error -> {
+                    binding.btnContinue.isEnabled = false
+                    Toast.makeText(this, formState.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         binding.btnContinue.setOnClickListener {
-            // 버튼이 활성화되어 있을 때만 다음 화면으로 이동
-            if (binding.btnContinue.isEnabled) {
+            if (viewModel.formState.value is LoginViewModel.FormState.Correct) {
                 val intent = Intent(this, LoginSecondActivity2::class.java)
                 startActivity(intent)
             }
         }
-    }
 
-    // 모든 필드의 빈칸 여부를 확인하고 버튼 상태를 변경하는 함수
-    private fun checkFieldsForEmptyValues() {
-        val id_email = binding.etIdEmail.text.toString().trim()
-
-        val allFieldsFilled = id_email.isNotEmpty()
-
-        // 모든 필드가 비어있지 않으면 버튼 활성화
-        if (allFieldsFilled) {
-            binding.btnContinue.isEnabled = true
-            binding.btnContinue.setBackgroundColor(Color.parseColor("#4682FF")) // 진한 파란색으로 변경
-        } else {
-            binding.btnContinue.isEnabled = false
-        }
-
-        if(viewModel.isLogin.value){
+        if (viewModel.isLogin.value) {
             login()
         }
     }
 
-    private fun login(){
+    private fun login() {
         startActivity(MainActivity.getIntent(this@LoginThirdActivity))
         finish()
     }

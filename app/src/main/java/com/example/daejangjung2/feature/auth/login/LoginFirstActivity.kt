@@ -13,9 +13,11 @@ import com.example.daejangjung2.databinding.ActivityLoginBinding
 import com.example.daejangjung2.databinding.ActivityLoginFirstBinding
 import com.example.daejangjung2.feature.auth.signup.SignupSecondActivity
 import com.example.daejangjung2.feature.main.MainActivity
+import com.example.daejangjung2.feature.auth.login.LoginViewModel
+
 
 class LoginFirstActivity : BindingActivity<ActivityLoginFirstBinding>(R.layout.activity_login_first) {
-    private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
