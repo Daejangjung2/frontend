@@ -9,13 +9,13 @@ import com.example.daejangjung2.data.repository.DefaultPostCallAllRepository.Com
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.model.DefaultResponse
 import com.example.daejangjung2.domain.repository.PostCallAllRepository
+import com.example.daejangjung2.domain.repository.PostCallLocationRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class DefaultPostCallAllRepository(
     private val networkPostCallAllDataSource: NetworkPostCallAllDataSource,
-    private val networkPostCallLocationDataSource: NetworkPostCallLocationDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): PostCallAllRepository {
     override suspend fun postcallall(): ApiResponse<DefaultResponse<List<PostCallAllResponse>>> {
@@ -26,12 +26,19 @@ class DefaultPostCallAllRepository(
             if (response is ApiResponse.Success) {
                 Log.d(HTTP_LOG_TAG,"Success")
             }
-
             response
         }
     }
+    companion object{
+        private val HTTP_LOG_TAG = "HTTP_LOG"
+    }
+}
 
-    override suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<List<PostCallLocationResponse>>> {
+class DefaultPostCallLocationRepository(
+    private val networkPostCallLocationDataSource: NetworkPostCallLocationDataSource,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+): PostCallLocationRepository {
+    override suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<PostCallLocationResponse>> {
         return withContext(dispatcher) {
             val response = networkPostCallLocationDataSource.postcalllocation(location, page, size)
 
@@ -39,11 +46,9 @@ class DefaultPostCallAllRepository(
             if (response is ApiResponse.Success) {
                 Log.d(HTTP_LOG_TAG,"Success")
             }
-
             response
         }
     }
-
     companion object{
         private val HTTP_LOG_TAG = "HTTP_LOG"
     }

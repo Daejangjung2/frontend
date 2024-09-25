@@ -12,6 +12,7 @@ import com.example.daejangjung2.data.repository.DefaultAuthRepository
 import com.example.daejangjung2.data.repository.DefaultCommunityRepository
 import com.example.daejangjung2.data.repository.DefaultMapRepository
 import com.example.daejangjung2.data.repository.DefaultPostCallAllRepository
+import com.example.daejangjung2.data.repository.DefaultPostCallLocationRepository
 import com.example.daejangjung2.data.retrofit.AuthRetrofit
 import com.example.daejangjung2.data.retrofit.AuthService
 import com.example.daejangjung2.data.retrofit.CommunityService
@@ -23,6 +24,7 @@ import com.example.daejangjung2.domain.repository.AuthRepository
 import com.example.daejangjung2.domain.repository.CommunityRepository
 import com.example.daejangjung2.domain.repository.MapRepository
 import com.example.daejangjung2.domain.repository.PostCallAllRepository
+import com.example.daejangjung2.domain.repository.PostCallLocationRepository
 import retrofit2.create
 
 class DIContainer(
@@ -56,13 +58,12 @@ class DIContainer(
     // 모든 포스트 부르기
     private val postcallallService = default.create(PostCallAllService::class.java)
     private val networkpostcallallDataSource = NetworkPostCallAllDataSource(postcallallService)
+    val postcallallRepository: PostCallAllRepository = DefaultPostCallAllRepository(networkpostcallallDataSource)
+
     // 지역별 포스트 부르기
     private val postcalllocationService = default.create(PostCallLocationService::class.java)
     private val networkpostcalllocationDataSource = NetworkPostCallLocationDataSource(postcalllocationService)
-    val postcallallRepository: PostCallAllRepository = DefaultPostCallAllRepository(networkpostcallallDataSource, networkpostcalllocationDataSource)
-
-
-    val postcalllocationRepository: PostCallAllRepository = DefaultPostCallAllRepository(networkpostcallallDataSource, networkpostcalllocationDataSource)
+    val postcalllocationRepository: PostCallLocationRepository = DefaultPostCallLocationRepository(networkpostcalllocationDataSource)
 
     val isLogin = authRepository.isLogin
 }
