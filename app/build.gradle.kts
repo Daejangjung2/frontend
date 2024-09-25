@@ -9,10 +9,16 @@ plugins {
     id("kotlin-parcelize") // @Parcelize
 }
 
+
 val properties: Properties = Properties()
 properties.load(project.rootProject.file("local.properties").inputStream())
 val serverUrl = properties.getProperty("SERVER_URL")
 val kakaoKey = properties.getProperty("KAKAO_KEY")
+val nativeAppKey = properties.getProperty("NATIVE_APP_KEY")
+val nativeappkey = properties.getProperty("KEY")
+val testappkey = properties.getProperty("TEST_APP_KEY")
+val testId = properties.getProperty("TEST_ID")
+
 
 android {
     namespace = "com.example.daejangjung2"
@@ -28,6 +34,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SERVER_URL", serverUrl)
         buildConfigField("String", "KAKAO_KEY", kakaoKey)
+        buildConfigField("String","NATIVE_APP_KEY", nativeAppKey)
+        buildConfigField("String","TEST_APP_KEY",testappkey)
+        buildConfigField("String", "TEST_ID",testId)
+//        manifestPlaceholders["NATIVE_APP_KEY"] = nativeappkey
+        manifestPlaceholders["NATIVE_APP_KEY"] = nativeAppKey
+        manifestPlaceholders["SERVER_URL"] = serverUrl
     }
 
     buildTypes {
@@ -65,6 +77,8 @@ android {
 
 }
 
+
+
 dependencies {
 
     implementation("androidx.core:core-ktx:1.10.1")
@@ -100,6 +114,13 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:3.14.9")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    //카카오로그인
+    implementation("com.kakao.sdk:v2-user:2.20.6")
+    implementation("com.kakao.sdk:v2-auth:2.20.6")
+
+
+
 
     // 직렬화 / 역직렬화 라이브러리
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
