@@ -10,7 +10,7 @@ import com.example.daejangjung2.domain.model.DefaultResponse
 class NetworkPostCallLocationDataSource(
     private val service: PostCallLocationService
 ) {
-    suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<List<PostCallLocationResponse>>> {
+    suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<PostCallLocationResponse>> {
         return service.PostCallLocation(location, page, size)
     }
 }

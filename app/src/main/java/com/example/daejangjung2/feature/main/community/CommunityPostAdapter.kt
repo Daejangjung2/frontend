@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.daejangjung2.R
 import com.example.daejangjung2.data.model.response.PostCallAllResponse
+import com.example.daejangjung2.data.model.response.PostCallLocationResponse
+import com.example.daejangjung2.data.model.response.PostContent
 import com.example.daejangjung2.databinding.ItemCommunityPostBinding
 
 class CommunityPostAdapter : ListAdapter<PostCallAllResponse, CommunityPostAdapter.CommunityPostViewHolder>(DiffCallback()) {
@@ -21,6 +23,9 @@ class CommunityPostAdapter : ListAdapter<PostCallAllResponse, CommunityPostAdapt
     override fun onBindViewHolder(holder: CommunityPostViewHolder, position: Int) {
         val post = getItem(position)
         holder.bind(post)
+        holder.itemView.setOnClickListener {
+            onPostClick(post)  // 클릭 시 콜백 호출
+        }
     }
 
     class CommunityPostViewHolder(private val binding: ItemCommunityPostBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -45,6 +50,46 @@ class CommunityPostAdapter : ListAdapter<PostCallAllResponse, CommunityPostAdapt
 
         override fun areContentsTheSame(oldItem: PostCallAllResponse, newItem: PostCallAllResponse): Boolean {
             return oldItem == newItem // 전체 내용을 비교하여 같은지 확인
+        }
+    }
+}
+
+
+
+class LocationPostAdapter : ListAdapter<PostContent, LocationPostAdapter.LocationPostViewHolder>(DiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationPostViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemCommunityPostBinding.inflate(inflater, parent, false)
+        return LocationPostViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: LocationPostViewHolder, position: Int) {
+        val post = getItem(position)
+        holder.bind(post)
+    }
+
+    class LocationPostViewHolder(private val binding: ItemCommunityPostBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(post: PostContent) {
+            binding.postTitle.text = post.title ?: "No Title"
+            binding.postLocation.text = post.location ?: "No Content"
+
+            // Load image with Glide, showing placeholder if no image URL
+            Glide.with(binding.postImage.context)
+                .load(post.image_url ?: R.drawable.placeholder_image)
+                .placeholder(R.drawable.placeholder_image)
+                .into(binding.postImage)
+
+            binding.executePendingBindings() // Execute pending bindings immediately
+        }
+    }
+
+    class DiffCallback : DiffUtil.ItemCallback<PostContent>() {
+        override fun areItemsTheSame(oldItem: PostContent, newItem: PostContent): Boolean {
+            return oldItem.postId == newItem.postId  // Check if items represent the same post by comparing their IDs
+        }
+
+        override fun areContentsTheSame(oldItem: PostContent, newItem: PostContent): Boolean {
+            return oldItem == newItem  // Check if the content of items is identical
         }
     }
 }

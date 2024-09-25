@@ -4,6 +4,7 @@ import com.example.daejangjung2.data.model.request.CreateRequest
 import com.example.daejangjung2.data.model.response.CreateResponse
 import com.example.daejangjung2.data.model.response.PostCallAllResponse
 import com.example.daejangjung2.data.model.response.PostCallLocationResponse
+import com.example.daejangjung2.data.model.response.PostContent
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.model.DefaultResponse
 import retrofit2.http.Body
@@ -22,5 +23,5 @@ interface PostCallLocationService {
         @Query("location") location: String,
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ): ApiResponse<DefaultResponse<List<PostCallLocationResponse>>>
+    ): ApiResponse<DefaultResponse<PostCallLocationResponse>>
 }

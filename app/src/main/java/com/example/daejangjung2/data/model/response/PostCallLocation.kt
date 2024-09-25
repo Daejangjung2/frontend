@@ -4,13 +4,22 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PostCallLocationResponse(
-    val createdAt: String,  // 날짜와 시간을 String으로 받음 (ISO 8601 형식)
-    val updateAt: String,   // 업데이트된 날짜와 시간도 String으로 받음
-    val postId: Int,        // 게시글 ID는 Int로
-    val communityComments: List<CommunityComment>,  // 댓글은 리스트로 받음, 만약 댓글에 대한 자세한 정보가 있다면 해당 객체로 변경
-    val image_url: String?,  // 이미지 URL은 null일 수 있으므로 nullable로 설정
-    val title: String?,     // 제목은 nullable로 설정
-    val contents: String?,  // 내용도 nullable
-    val location: String?,  // 위치도 nullable
-    val view: Int?           // 조회수는 Int로 받음
+    val content: List<PostContent>,  // 게시물 리스트는 PostContent 객체 리스트로 받음
+    val currentPage: Int,            // 현재 페이지 번호
+    val size: Int,                   // 페이지 사이즈
+    val first: Boolean,              // 첫 페이지 여부
+    val last: Boolean                // 마지막 페이지 여부
+)
+
+@Serializable
+data class PostContent(              // 게시물에 대한 데이터를 새로운 객체로 만듦
+    val postId: Int,                 // 게시글 ID
+    val image_url: String?,          // 이미지 URL
+    val title: String?,              // 제목
+    val contents: String?,           // 내용
+    val location: String?,           // 위치
+    val communityComment: List<CommunityComment>,  // 댓글 리스트
+    val createdAt: String,           // 생성일
+    val updatedAt: String,           // 업데이트일
+    val view: Int?                   // 조회수
 )
