@@ -16,10 +16,6 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
         }
-        maven {
-            url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
-        }
-
     }
 }
 
