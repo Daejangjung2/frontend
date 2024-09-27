@@ -7,6 +7,7 @@ import com.example.daejangjung2.data.model.request.LoginRequest
 import com.example.daejangjung2.data.model.request.RefreshTokenRequest
 import com.example.daejangjung2.data.model.response.Token
 import com.example.daejangjung2.domain.model.ApiResponse
+import com.example.daejangjung2.domain.model.DefaultResponse
 import com.example.daejangjung2.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -91,6 +92,20 @@ class DefaultAuthRepository(
     override fun updateToken(token: Token) {
         runBlocking {
             localAuthDataSource.updateToken(token)
+        }
+    }
+
+    override suspend fun logout(): ApiResponse<DefaultResponse<Unit>> {
+        return withContext(dispatcher){
+            val response = networkAuthDataSource.logout()
+
+            if (response is ApiResponse.Success) {
+                Log.d(HTTP_LOG_TAG,"Success")
+                response.body?.let {
+                    localAuthDataSource.removeToken()
+                }
+            }
+            response
         }
     }
 
