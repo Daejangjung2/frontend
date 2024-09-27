@@ -12,7 +12,8 @@ plugins {
 val properties: Properties = Properties()
 properties.load(project.rootProject.file("local.properties").inputStream())
 val serverUrl = properties.getProperty("SERVER_URL")
-val kakaoKey = properties.getProperty("KAKAO_KEY")
+val kakaoKey = properties.getProperty("KAKAO_KEY")      // 네이티브키
+val kakaoKey2 = properties.getProperty("KAKAO_KEY2")    // rest api 키
 
 android {
     namespace = "com.example.daejangjung2"
@@ -28,6 +29,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SERVER_URL", serverUrl)
         buildConfigField("String", "KAKAO_KEY", kakaoKey)
+        buildConfigField("String", "KAKAO_KEY2", kakaoKey2)
     }
 
     buildTypes {
@@ -62,7 +64,6 @@ android {
     dataBinding {
         enable = true
     }
-
 }
 
 dependencies {
