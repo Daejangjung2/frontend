@@ -71,8 +71,14 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
     private fun changeFragment(screenType: ScreenType.ChangeScreenType) {
         val fragment = supportFragmentManager.findFragmentByTag(screenType.tag)
         supportFragmentManager.commit {
-            supportFragmentManager.fragments.forEach(::hide)
+            supportFragmentManager.fragments.forEach { existingFragment ->
+                if (existingFragment.isVisible) {
+                    detach(existingFragment)  // Fragment를 detach하여 완전히 lifecycle에서 뷰를 분리
+                }
+            }
+
             if (fragment == null) {
+                // 새로운 Fragment를 추가
                 add(
                     binding.fcvMain.id,
                     when (screenType) {
@@ -81,12 +87,12 @@ class MainActivity: BindingActivity<ActivityMainBinding>(R.layout.activity_main)
                         ScreenType.ChangeScreenType.Community -> CommunityFragment.newInstance()
                         ScreenType.ChangeScreenType.MyPage -> MyPageFragment.newInstance()
                     },
-                    screenType.tag,
+                    screenType.tag
                 )
             } else {
-                show(fragment)
+                attach(fragment)  // 기존 Fragment를 attach하여 다시 보여줌
             }
-            setReorderingAllowed(true) // 전환 애니메이션 등 최적화
+            setReorderingAllowed(true)  // 전환 애니메이션 등 최적화
         }
     }
 

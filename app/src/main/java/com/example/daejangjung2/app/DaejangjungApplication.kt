@@ -5,11 +5,13 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.daejangjung2.BuildConfig
-import com.example.daejangjung2.common.util.log
+//import com.example.daejangjung2.common.util.log
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 import com.kakao.vectormap.KakaoMapSdk
 import timber.log.Timber
 
@@ -25,14 +27,20 @@ class DaejangjungApplication: Application() {
         // 디버그 모드로 빌드한 경우에만 팀버가 동작하도록
         if (BuildConfig.DEBUG_MODE) {
             Timber.plant(Timber.DebugTree())
-            log(message = "deviceId: $deviceId")
+//            log(message = "deviceId: $deviceId")
         }
 
-        KakaoSdk.init(this, BuildConfig.KAKAO_KEY)
-        KakaoMapSdk.init(this, BuildConfig.KAKAO_KEY);
+        var keyHash = Utility.getKeyHash(this)
+        Log.d("Hash", keyHash)
+
+        KakaoSdk.init(this,BuildConfig.KAKAO_KEY);
+        KakaoSdk.init(this, BuildConfig.KAKAO_KEY2)
+        KakaoMapSdk.init(this, BuildConfig.KAKAO_KEY)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // 다크모드 일단은 방지
     }
+
+
 
     companion object {
         private lateinit var _instance: DaejangjungApplication

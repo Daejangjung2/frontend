@@ -148,4 +148,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     implementation("com.kakao.sdk:v2-user:2.0.1")
+
+    //카카오로그인
+    implementation("com.kakao.sdk:v2-user:2.20.6")
+    implementation("com.kakao.sdk:v2-auth:2.20.6")
 }

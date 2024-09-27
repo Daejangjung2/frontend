@@ -5,9 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
 
     <application
         android:name=".app.DaejangjungApplication"
@@ -22,11 +21,14 @@
         android:theme="@style/Base.Theme.Daejangjung2"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".feature.auth.login.LoginSecondActivity2"
+            android:exported="false" />
         <activity
             android:name=".feature.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +45,42 @@
         <activity
             android:name=".feature.main.MainActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.Daejangjung2">
+            android:theme="@style/Base.Theme.Daejangjung2"></activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginFirstActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginSecondActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginThirdActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".feature.auth.login.LoginFourthActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupFirstActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupSecondActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupThirdActivity"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".feature.auth.signup.SignupFourthActivity"
+            android:exported="false">
         </activity>
     </application>
 

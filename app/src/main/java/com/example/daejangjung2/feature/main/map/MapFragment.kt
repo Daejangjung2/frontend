@@ -125,6 +125,10 @@ class MapFragment : BindingFragment<FragmentMapBinding>(R.layout.fragment_map),
             override fun getZoomLevel(): Int {
                 return 17
             }
+
+            override fun getPosition(): LatLng {
+                return super.getPosition()
+            }
         })
     }
 

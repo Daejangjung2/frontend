@@ -16,38 +16,41 @@
         tools:context=".feature.auth.login.LoginActivity">
 
         <!-- Title: 로그인 -->
+
+        <!-- Email Input -->
+
         <TextView
             android:id="@+id/tv_login_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="132dp"
             android:text="로그인"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:layout_marginTop="129dp"
-            android:layout_marginLeft="24dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="@id/et_email"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Email Input -->
         <EditText
             android:id="@+id/et_email"
             android:hint=" 기존 ID | E-mail"
             android:inputType="textEmailAddress"
-            android:layout_width="355dp"
+            android:layout_width="match_parent"
             android:layout_height="51dp"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/tv_login_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="18dp"
+            android:layout_marginHorizontal="24dp"
             android:padding="12dp"
+            android:text="@={vm.email}"
             android:background="@drawable/edittext_background"
             android:drawableLeft="@drawable/ic_email" />
 
         <!-- Password Input -->
         <EditText
             android:id="@+id/et_password"
-            android:layout_width="355dp"
+            android:layout_width="match_parent"
             android:layout_height="51dp"
             android:hint=" 비밀번호를 입력하세요."
             android:inputType="textPassword"
@@ -58,6 +61,8 @@
             app:layout_constraintBottom_toTopOf="@+id/layout_continue_with"
             android:layout_marginTop="21dp"
             android:padding="12dp"
+            android:text="@={vm.pwd}"
+            android:layout_marginHorizontal="24dp"
             android:background="@drawable/edittext_background"
             android:drawableLeft="@drawable/ic_password" />
 
@@ -94,21 +99,24 @@
 
 
 
-        <!-- Kakao Login Button -->
-        <Button
-            android:id="@+id/btn_kakao_login"
-            android:layout_width="355dp"
-            android:layout_height="51dp"
-            android:backgroundTint="@color/yellow_FFCB45"
-            android:text="카카오 로그인"
-            android:textColor="@android:color/black"
-            app:layout_constraintTop_toBottomOf="@id/et_password"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="54dp"
-            android:drawableLeft="@drawable/ic_kakao"
-            android:drawablePadding="8dp"
-            android:padding="12dp"/>
+<!--        &lt;!&ndash; Kakao Login Button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/btn_kakao_login"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="51dp"-->
+<!--            android:backgroundTint="#ffeb01"-->
+<!--            android:text="카카오 로그인"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/et_password"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:layout_marginTop="54dp"-->
+<!--            android:layout_marginHorizontal="24dp"-->
+<!--            android:drawableLeft="@drawable/ic_kakao"-->
+<!--            android:drawablePadding="8dp"-->
+<!--            android:padding="12dp"/>-->
+
+
         <!-- Find ID, Password, Signup -->
         <TextView
             android:id="@+id/tv_find_id"
@@ -139,7 +147,7 @@
             android:text="비밀번호 찾기"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@id/btn_kakao_login"
+            app:layout_constraintTop_toBottomOf="@id/layout_continue_with"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -175,7 +183,7 @@
             android:backgroundTint="@color/blue_468FF"
             android:textColor="@android:color/white"
             android:padding="12dp"
-            android:layout_marginHorizontal="23dp"
+            android:layout_marginHorizontal="24dp"
             android:layout_marginBottom="37dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
