@@ -41,8 +41,8 @@ class LoginViewModel(
     val isLoading: StateFlow<Boolean>
         get() = _isLoading
 
-    val email: MutableStateFlow<String> = MutableStateFlow("")
-    val pwd: MutableStateFlow<String> = MutableStateFlow("")
+    val email: MutableStateFlow<String> = MutableStateFlow("test1234@naver.com")
+    val pwd: MutableStateFlow<String> = MutableStateFlow("test1234")
     val code: MutableStateFlow<String> = MutableStateFlow("")
     private lateinit var kakaoAuthService: KakaoAuthService
     private val _loginResult = MutableLiveData<Boolean>()
