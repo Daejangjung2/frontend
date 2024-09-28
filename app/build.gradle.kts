@@ -30,6 +30,9 @@ android {
         buildConfigField("String", "SERVER_URL", serverUrl)
         buildConfigField("String", "KAKAO_KEY", kakaoKey)
         buildConfigField("String", "KAKAO_KEY2", kakaoKey2)
+
+        manifestPlaceholders["KAKAO_KEY"] = kakaoKey
+
     }
 
     buildTypes {

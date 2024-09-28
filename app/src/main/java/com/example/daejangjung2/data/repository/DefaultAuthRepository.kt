@@ -65,6 +65,23 @@ class DefaultAuthRepository(
         }
     }
 
+    override suspend fun kakaoLogin(accessToken: String): ApiResponse<Token> {
+        return withContext(dispatcher) {
+            val response = networkAuthDataSource.kakaoLogin(accessToken)
+
+
+            Log.d(HTTP_LOG_TAG, response.toString())
+            if (response is ApiResponse.Success) {
+                Log.d(HTTP_LOG_TAG,"Success")
+                response.body?.let {
+                    localAuthDataSource.updateToken(response.body)
+                }
+            }
+
+            response
+        }
+    }
+
     // 토큰을 내부 저장소에서 가져오는
     override fun getToken(): Token {
         return localAuthDataSource.getToken()
