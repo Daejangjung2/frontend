@@ -24,4 +24,7 @@
     <string name="write_post">글쓰기</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--mypage-->
+    <string name="mypage_title">마이페이지</string>
 </resources>

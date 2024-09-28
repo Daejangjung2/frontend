@@ -34,4 +34,6 @@
 
     <color name="blue__">#469CFF</color>
 
+    <color name="curve_color">#9ECBFF</color>
+
 </resources>
