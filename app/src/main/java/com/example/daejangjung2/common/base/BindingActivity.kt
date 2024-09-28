@@ -28,4 +28,8 @@ abstract class BindingActivity<T : ViewDataBinding>(@LayoutRes private val layou
                 .collect { event(it) }
         }
     }
+
+    abstract class BindingActivity<T : ViewDataBinding> : AppCompatActivity() {
+        protected lateinit var localBinding: T
+    }
 }

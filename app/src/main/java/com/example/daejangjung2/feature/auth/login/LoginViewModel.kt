@@ -1,6 +1,7 @@
 package com.example.daejangjung2.feature.auth.login
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.webkit.WebViewClient
@@ -64,6 +65,7 @@ class LoginViewModel(
     val formState: StateFlow<FormState>
         get() = _formState
 
+
     init {
         viewModelScope.launch {
             _isLogin.value = authRepository.isLogin
@@ -85,18 +87,7 @@ class LoginViewModel(
         viewModelScope.launch {
             pwd.collect { validatePassword() }
         }
-//        // Retrofit 클라이언트 설정
-//        val client = OkHttpClient.Builder().build()
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://kauth.kakao.com/")
-//            .client(client)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//
-//        kakaoAuthService = retrofit.create(KakaoAuthService::class.java)
-//
-//
+
     }
 
     // 이메일 유효성 검사
@@ -133,16 +124,25 @@ class LoginViewModel(
             _formState.value = FormState.Error("비밀번호를 입력하세요.")
         }
     }
-    fun handleRedirectedUrl(url: String) {
-        val uri = Uri.parse(url)
-        val code = uri.getQueryParameter("code")
-        if (code != null) {
-            _authCode.postValue(code)
-            Log.d("KakaoLogin", "Received auth code: $code")
-        } else {
-            Log.e("KakaoLogin", "No auth code found in the URL")
+    fun handleIntent(context: Context, intent: Intent){
+        intent.data?.let { uri ->
+            if (uri.scheme == "kakao${BuildConfig.NATIVE_APP_KEY}" && uri.host == "oauth2") {
+                // URI에 포함된 인증 코드 추출
+                val accessToken = uri.getQueryParameter("accessToken")
+                val refreshToken = uri.getQueryParameter("refreshToken")
+                if (accessToken != null) {
+                    // 인증 코드 사용하여 서버로 토큰 요청 등 처리
+                    Toast.makeText(context, "Authorization Code: $accessToken", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(context, "Authorization code missing", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
+
+
+
 
         fun loginWithKakao(context: Context, redirectUri: String) {
 //        requestAuthorizationCode(context,BuildConfig.NATIVE_APP_KEY, redirectUri)

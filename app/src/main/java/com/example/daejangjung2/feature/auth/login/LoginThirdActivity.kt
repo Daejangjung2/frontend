@@ -15,7 +15,7 @@ import com.example.daejangjung2.databinding.ActivityLoginThirdBinding
 import com.example.daejangjung2.feature.main.MainActivity
 
 class LoginThirdActivity : BindingActivity<ActivityLoginThirdBinding>(R.layout.activity_login_third) {
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels{ LoginViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

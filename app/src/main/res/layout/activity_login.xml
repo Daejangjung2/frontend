@@ -104,7 +104,7 @@
             android:id="@+id/btn_kakao_login"
             android:layout_width="match_parent"
             android:layout_height="51dp"
-            android:backgroundTint="@color/yellow_FFCB45"
+            android:backgroundTint="#ffeb01"
             android:text="카카오 로그인"
             android:textColor="@android:color/black"
             app:layout_constraintTop_toBottomOf="@id/et_password"
@@ -115,6 +115,8 @@
             android:drawableLeft="@drawable/ic_kakao"
             android:drawablePadding="8dp"
             android:padding="12dp"/>
+
+
         <!-- Find ID, Password, Signup -->
         <TextView
             android:id="@+id/tv_find_id"

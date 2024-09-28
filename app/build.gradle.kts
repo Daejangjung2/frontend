@@ -39,6 +39,7 @@ android {
         buildConfigField("String", "TEST_ID",testId)
 //        manifestPlaceholders["NATIVE_APP_KEY"] = nativeappkey
         manifestPlaceholders["NATIVE_APP_KEY"] = nativeAppKey
+        manifestPlaceholders["CLIENT_ID"] = testId
         manifestPlaceholders["SERVER_URL"] = serverUrl
     }
 
@@ -117,7 +118,6 @@ dependencies {
 
     //카카오로그인
     implementation("com.kakao.sdk:v2-user:2.20.6")
-    implementation("com.kakao.sdk:v2-auth:2.20.6")
 
 
 
