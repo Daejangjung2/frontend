@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -16,6 +17,7 @@ import com.example.daejangjung2.BuildConfig
 import com.example.daejangjung2.app.DaejangjungApplication
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.repository.AuthRepository
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,7 +89,6 @@ class LoginViewModel(
         viewModelScope.launch {
             pwd.collect { validatePassword() }
         }
-
     }
 
     // 이메일 유효성 검사
@@ -141,73 +142,75 @@ class LoginViewModel(
         }
     }
 
-
-
-
-        fun loginWithKakao(context: Context, redirectUri: String) {
-//        requestAuthorizationCode(context,BuildConfig.NATIVE_APP_KEY, redirectUri)
-
-//            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-//                // 카카오톡 로그인 시도
-//                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
-//                    if (error != null) {
-//                        Log.i("login","fail")
-//                        Log.e("KakaoLogin", "카카오 로그인 실패", error)
-//                        // 로그인 실패
-//                        _loginResult.postValue(false)
-//                    } else if (token != null) {
-//                        Log.i("login","success")
-//                        Log.i("KakaoLogin", "카카오 로그인 성공 ${token.accessToken}")
-//                        // 로그인 성공
-//                        _loginResult.postValue(true)
-//                    }
-//                }
-//            } else {
-//                // 카카오 계정 로그인 시도
-//                UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-//                    if (error != null) {
-//                        _loginResult.postValue(false)
-//                        Log.e("KakaoLogin", "카카오 로그인 실패", error)
-//                    } else if (token != null) {
-//                        _loginResult.postValue(true)
-//                        Log.i("KakaoLogin", "카카오 로그인 성공 ${token.accessToken}")
-//                    }
-//                }
-//            }
-
-        // WebView 설정 (사용자 로그인 유도)
-//        val webView = findViewById<WebView>(R.id.webView)
-//        webView.settings.javaScriptEnabled = true
-//
-//        webView.webViewClient = object : WebViewClient() {
-//            override fun onPageFinished(view: WebView?, url: String?) {
-//                super.onPageFinished(view, url)
-//                // 인가 코드가 redirect_uri로 전달되는 것을 확인
-//                if (url != null && url.startsWith("YOUR_REDIRECT_URI")) {
-//                    val uri = Uri.parse(url)
-//                    val authCode = uri.getQueryParameter("code")
-//                    Log.d("KakaoLogin", "Authorization Code: $authCode")
-//                    // 받은 인가 코드를 사용하여 액세스 토큰 요청 등의 후속 작업을 진행
-//                }
-//            }
-//        }
+    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.e(TAG, "카카오계정으로 로그인 실패", error)
+        } else if (token != null) {
+            Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
+        }
     }
-//    private fun requestAuthorizationCode(context: Context, clientId: String, redirectUri: String) {
-//        kakaoAuthRepository.fetchAuthorizationCode(
-//            clientId = clientId,  // Kakao Developers에서 발급된 Client ID
-//            redirectUri = redirectUri,  // Kakao Developers에서 설정한 Redirect URI
-//            onSuccess = { authorizationCode ->
-//                // 성공적으로 Authorization Code를 받은 경우
-//                Toast.makeText(context, "Authorization Code: $authorizationCode", Toast.LENGTH_SHORT).show()
-//                Log.i("code", authorizationCode)
-//                // 이후 Authorization Code를 사용하여 토큰을 요청하는 등의 로직 처리
-//            },
-//            onFailure = { throwable ->
-//                // 에러 발생 시
-//                Toast.makeText(context, "Failed to get authorization code: ${throwable.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        )
-//    }
+
+    fun loginWithKakao(context: Context) {
+        viewModelScope.launch {
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+                UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                    if (error != null) {
+                        if (error != null) {
+                            // 카카오 로그인 실패 처리
+                            Log.e(TAG, "카카오 로그인 실패: ${error.message}")
+                        } else if (token != null) {
+                            val kakaoAccessToken = token.accessToken // 엑세스 토큰 얻기
+                            requestKakaoUserInfo(context)
+                            // 카카오 로그인 성공 처리
+                            Log.i(TAG, "카카오 로그인 성공")
+                            Log.i(TAG, kakaoAccessToken)
+                            requestKakaoUserInfo(context)
+                        }
+
+                        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                        UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+                    } else if (token != null) {
+                        Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
+                    }
+                }
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+            }
+        }
+    }
+
+    private fun requestKakaoUserInfo(context: Context) {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                // 사용자 정보 요청 실패 처리
+                Log.e(TAG, "사용자 정보 요청 실패: ${error.message}")
+            } else if (user != null) {
+                val userId = user.id
+                val nickname = user.kakaoAccount?.profile?.nickname
+                val isEmailVerified = user.kakaoAccount?.isEmailVerified ?: false
+
+                // 이메일 미인증 시 동의창 띄우기
+                if (!isEmailVerified) {
+                    UserApiClient.instance.loginWithNewScopes(
+                        context,
+                        listOf("account_email")
+                    ) { oAuthResponse, consentError ->
+                        if (consentError != null) {
+                            // 동의 실패 처리
+                            Log.e(TAG, "동의 실패: ${consentError.message}")
+                        } else {
+                            // 동의 성공 처리
+                            Log.i(TAG, "동의 성공")
+                        }
+                    }
+
+                } else {
+                    // 이미 이메일 인증된 사용자의 처리
+                    Log.i(TAG, "이미 이메일 인증된 사용자")
+                }
+            }
+        }
+    }
 
 
     fun login() {
@@ -273,5 +276,7 @@ class LoginViewModel(
                 ) as T
             }
         }
+
+        const val TAG = "tag"
     }
 }

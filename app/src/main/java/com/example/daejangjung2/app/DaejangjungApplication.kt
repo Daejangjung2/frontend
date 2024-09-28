@@ -34,7 +34,6 @@ class DaejangjungApplication: Application() {
         Log.d("Hash", keyHash)
 
         KakaoSdk.init(this,BuildConfig.KAKAO_KEY);
-        KakaoSdk.init(this, BuildConfig.KAKAO_KEY2)
         KakaoMapSdk.init(this, BuildConfig.KAKAO_KEY)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // 다크모드 일단은 방지
