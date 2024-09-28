@@ -16,4 +16,8 @@ class NetworkAuthDataSource(
     suspend fun refresh(assessToken: RefreshTokenRequest): Token{
         return service.refresh(assessToken)
     }
+
+    suspend fun kakaoLogin(accessToken: String): ApiResponse<Token>{
+        return service.kakaoLogin(accessToken)
+    }
 }

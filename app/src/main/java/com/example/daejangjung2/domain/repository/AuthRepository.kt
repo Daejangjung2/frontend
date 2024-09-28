@@ -6,6 +6,7 @@ import com.example.daejangjung2.domain.model.ApiResponse
 interface AuthRepository {
     val isLogin: Boolean
     suspend fun login(id: String, pwd: String): ApiResponse<Token>
+    suspend fun kakaoLogin(accessToken: String): ApiResponse<Token>
     fun getToken(): Token
     suspend fun refreshToken()
     fun removeToken()

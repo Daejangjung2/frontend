@@ -165,12 +165,15 @@ class LoginViewModel(
                             Log.i(TAG, "카카오 로그인 성공")
                             Log.i(TAG, kakaoAccessToken)
                             requestKakaoUserInfo(context)
+
+                            kakaoLogin(kakaoAccessToken)
                         }
 
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     } else if (token != null) {
                         Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        kakaoLogin(token.accessToken)
                     }
                 }
             } else {
@@ -250,6 +253,33 @@ class LoginViewModel(
                 }
             }
             _isLoading.value = false
+        }
+    }
+
+    fun kakaoLogin(accessToken: String){
+        viewModelScope.launch {
+            when (val response = authRepository.kakaoLogin(accessToken)) {
+                is ApiResponse.Success -> {
+                    _event.emit(Event.LoginSuccess)
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.emit(
+                        Event.LoginFailed(
+                            try {
+                                response.error.toString()
+                            }
+                            catch (e: Exception){
+                                response.error?.firstOrNull().toString()
+                            }
+                        ),
+                    )
+                }
+
+                else -> {
+                    Event.LoginFailed("알 수 없는 에러가 발생했습니다.")
+                }
+            }
         }
     }
 

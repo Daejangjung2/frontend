@@ -11,6 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthService {
     @POST("/api/login/auth/signin")
@@ -22,6 +23,11 @@ interface AuthService {
     suspend fun refresh(
         @Body token: RefreshTokenRequest
     ): Token
+
+    @GET("/api/kakao/auth/login/oauth2")
+    suspend fun kakaoLogin(
+        @Query("accessToken") accessToken: String
+    ): ApiResponse<Token>
 }
 
 interface AuthServiceToken {
