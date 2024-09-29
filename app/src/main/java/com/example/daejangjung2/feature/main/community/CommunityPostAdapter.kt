@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.daejangjung2.R
 import com.example.daejangjung2.data.model.response.PostCallAllResponse
-import com.example.daejangjung2.data.model.response.PostCallLocationResponse
 import com.example.daejangjung2.data.model.response.PostContent
 import com.example.daejangjung2.databinding.ItemCommunityPostBinding
 
-class CommunityPostAdapter : ListAdapter<PostCallAllResponse, CommunityPostAdapter.CommunityPostViewHolder>(DiffCallback()) {
+// CommunityPostAdapter 정의
+class CommunityPostAdapter(
+    private val onPostClick: (PostCallAllResponse) -> Unit  // 클릭 이벤트를 람다로 정의
+) : ListAdapter<PostCallAllResponse, CommunityPostAdapter.CommunityPostViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityPostViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -54,9 +56,10 @@ class CommunityPostAdapter : ListAdapter<PostCallAllResponse, CommunityPostAdapt
     }
 }
 
-
-
-class LocationPostAdapter : ListAdapter<PostContent, LocationPostAdapter.LocationPostViewHolder>(DiffCallback()) {
+// LocationPostAdapter 정의
+class LocationPostAdapter(
+    private val onPostClick: (PostContent) -> Unit  // 클릭 이벤트를 람다로 정의
+) : ListAdapter<PostContent, LocationPostAdapter.LocationPostViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationPostViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemCommunityPostBinding.inflate(inflater, parent, false)
@@ -66,6 +69,9 @@ class LocationPostAdapter : ListAdapter<PostContent, LocationPostAdapter.Locatio
     override fun onBindViewHolder(holder: LocationPostViewHolder, position: Int) {
         val post = getItem(position)
         holder.bind(post)
+        holder.itemView.setOnClickListener {
+            onPostClick(post)  // 클릭 시 콜백 호출
+        }
     }
 
     class LocationPostViewHolder(private val binding: ItemCommunityPostBinding) : RecyclerView.ViewHolder(binding.root) {

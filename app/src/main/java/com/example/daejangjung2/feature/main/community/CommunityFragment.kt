@@ -12,6 +12,7 @@ import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingFragment
 import com.example.daejangjung2.data.model.response.PostCallAllResponse
 import com.example.daejangjung2.databinding.FragmentCommunityBinding
+import com.example.daejangjung2.feature.main.community.detailpost.DetailPostFragment
 import com.example.daejangjung2.feature.main.community.post.WritePostFragment
 import com.example.daejangjung2.feature.main.community.websocket.WebSocketManager
 import com.example.daejangjung2.feature.main.map.MapFragment
@@ -32,11 +33,12 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
 
         // RecyclerView 설정
         // 어댑터 생성 시 클릭 리스너 콜백 전달
-        val allAdapter = CommunityPostAdapter { post ->
-            // post 클릭 시 처리할 동작 정의
-            navigateToDetail(post)
+        allAdapter = CommunityPostAdapter { post ->
+            navigateToDetailPost(post.postId)  // 게시물 클릭 시 상세 화면으로 이동
         }
-        locationAdapter = LocationPostAdapter()
+        locationAdapter = LocationPostAdapter { post ->
+            navigateToDetailPost(post.postId)  // 특정 위치의 게시물 클릭 시 상세 화면으로 이동
+        }
 
         binding.communityRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.communityRecyclerView.adapter = allAdapter
@@ -128,12 +130,12 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
     }
 
     // 클릭된 post를 Detail 화면으로 전달하는 함수
-    private fun navigateToDetail(post: PostCallAllResponse) {
-        // DetailFragment로 데이터 전달
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, DetailPostFragment.newInstance(post))
-        transaction.addToBackStack(null)
-        transaction.commit()
+    private fun navigateToDetailPost(postId: Int) {
+        val detailFragment = DetailPostFragment.newInstance(postId)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.container, detailFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 
