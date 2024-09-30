@@ -2,8 +2,10 @@ package com.example.daejangjung2.data.retrofit
 
 import com.example.daejangjung2.data.model.request.LoginRequest
 import com.example.daejangjung2.data.model.request.RefreshTokenRequest
+import com.example.daejangjung2.data.model.response.LogoutResponse
 import com.example.daejangjung2.data.model.response.Token
 import com.example.daejangjung2.domain.model.ApiResponse
+import com.example.daejangjung2.domain.model.DefaultResponse
 import com.example.daejangjung2.feature.main.community.AuthResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,6 +30,11 @@ interface AuthService {
     suspend fun kakaoLogin(
         @Query("accessToken") accessToken: String
     ): ApiResponse<Token>
+
+    @POST("/api/login/auth/logout")
+    suspend fun logout(
+        @Header("Authorization") authorization: String
+    ): ApiResponse<DefaultResponse<Unit>>
 }
 
 interface AuthServiceToken {

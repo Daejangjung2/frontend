@@ -98,7 +98,7 @@ class MapViewModel(
             when(val response = mapRepository.weather("서울특별시","동작구")){
                 is ApiResponse.Success -> {
                     response.body?.let {data ->
-                        _weather.update { data.data }
+                        _weather.update { data.data!! }
                     }
                     _event.emit(Event.Service(ServiceType.WEATHER))
                 }
@@ -127,11 +127,11 @@ class MapViewModel(
         }
     }
 
-    sealed class Event {
-        object Success: Event();
-        data class Failed(val message: String): Event();
+    sealed interface Event {
+        data object Success: Event;
+        data class Failed(val message: String): Event;
 
-        data class Service(val service: ServiceType): Event();
+        data class Service(val service: ServiceType): Event;
     }
 
 

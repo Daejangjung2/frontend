@@ -42,10 +42,10 @@ class HomeViewModel : ViewModel() {
 
 
 
-    sealed class Event {
-        data class SelectNotice(val notice: Notice): Event();
-        data object Success : Event();
-        data class Failed(val message: String) : Event();
+    sealed interface Event {
+        data class SelectNotice(val notice: Notice): Event;
+        data object Success : Event;
+        data class Failed(val message: String) : Event;
     }
 
 
