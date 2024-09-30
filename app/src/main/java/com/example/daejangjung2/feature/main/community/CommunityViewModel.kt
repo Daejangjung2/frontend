@@ -122,7 +122,7 @@ class CommunityViewModel(
         viewModelScope.launch {
             when (val response = postcallallRepository.postcallall()) {
                 is ApiResponse.Success -> {
-                    val postData: List<PostCallAllResponse> = response.body.data
+                    val postData: List<PostCallAllResponse> = response.body.data!!
                     // LiveData에 새로운 리스트로 업데이트
                     _posts.value = postData
                     Log.d("community", "성공")
@@ -145,7 +145,7 @@ class CommunityViewModel(
         viewModelScope.launch {
             when (val response = postcallallRepository.postcalllocation(location, 0, 100)) {
                 is ApiResponse.Success -> {
-                    val postData: List<PostCallLocationResponse> = response.body.data
+                    val postData: List<PostCallLocationResponse> = response.body.data!!
                     // LiveData에 새로운 리스트로 업데이트
                     _posts_location.value = postData
                     Log.d("community", "성공")

@@ -125,22 +125,6 @@ class LoginViewModel(
             _formState.value = FormState.Error("비밀번호를 입력하세요.")
         }
     }
-    fun handleIntent(context: Context, intent: Intent){
-        intent.data?.let { uri ->
-            if (uri.scheme == "kakao${BuildConfig.KAKAO_KEY}" && uri.host == "oauth2") {
-                // URI에 포함된 인증 코드 추출
-                val accessToken = uri.getQueryParameter("accessToken")
-                val refreshToken = uri.getQueryParameter("refreshToken")
-                if (accessToken != null) {
-                    // 인증 코드 사용하여 서버로 토큰 요청 등 처리
-                    Toast.makeText(context, "Authorization Code: $accessToken", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(context, "Authorization code missing", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
 
     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
