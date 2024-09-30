@@ -21,25 +21,26 @@
         android:theme="@style/Base.Theme.Daejangjung2"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".feature.auth.signup.consent.ConsentActivity"
+            android:exported="false" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="oauth"
                     android:scheme="kakao ${KAKAO_KEY}" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".feature.auth.login.LoginSecondActivity2"
             android:exported="false" />
-
         <activity
             android:name=".feature.splash.SplashActivity"
             android:exported="true"
@@ -60,39 +61,31 @@
         <activity
             android:name=".feature.main.MainActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.Daejangjung2"></activity>
-
+            android:theme="@style/Base.Theme.Daejangjung2" />
         <activity
             android:name=".feature.auth.login.LoginFirstActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.login.LoginSecondActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.login.LoginThirdActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.login.LoginFourthActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.signup.SignupFirstActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.signup.SignupSecondActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.signup.SignupThirdActivity"
-            android:exported="false"></activity>
-
+            android:exported="false" />
         <activity
             android:name=".feature.auth.signup.SignupFourthActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
