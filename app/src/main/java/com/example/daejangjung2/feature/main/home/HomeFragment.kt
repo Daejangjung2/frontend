@@ -28,6 +28,15 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private lateinit var banner: ViewPager2
     private lateinit var layout: LinearLayout;
 
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            if (isAdded) {
+                setCurrentIndicator(position)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
@@ -85,12 +94,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             }
         }, delay)
 
-        banner.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                setCurrentIndicator(position)
-            }
-        })
+        banner.registerOnPageChangeCallback(onPageChangeCallback)
 
         setupIndicators(banners.size)
     }
@@ -160,6 +164,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                 )
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        banner.unregisterOnPageChangeCallback(onPageChangeCallback)  // ViewPager2 콜백 해제
     }
 
     companion object {
