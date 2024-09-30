@@ -15,7 +15,7 @@ import com.example.daejangjung2.databinding.ActivityLoginFourthBinding
 import com.example.daejangjung2.feature.main.MainActivity
 
 class LoginFourthActivity : BindingActivity<ActivityLoginFourthBinding>(R.layout.activity_login_fourth) {
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels{LoginViewModel.Factory}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
