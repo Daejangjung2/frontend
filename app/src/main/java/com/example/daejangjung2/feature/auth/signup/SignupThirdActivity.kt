@@ -18,7 +18,7 @@ class SignupThirdActivity : BindingActivity<ActivitySignupThirdBinding>(R.layout
 
         // 모든 입력 필드에 대해 텍스트 변경 리스너를 추가
         binding.etPhone.addTextChangedListener { checkFieldsForEmptyValues() }
-        binding.etCode.addTextChangedListener { checkFieldsForEmptyValues() }
+//        binding.etCode.addTextChangedListener { checkFieldsForEmptyValues() }
 
         binding.btnContinue.setOnClickListener {
             // 버튼이 활성화되어 있을 때만 다음 화면으로 이동
@@ -32,9 +32,9 @@ class SignupThirdActivity : BindingActivity<ActivitySignupThirdBinding>(R.layout
     // 모든 필드의 빈칸 여부를 확인하고 버튼 상태를 변경하는 함수
     private fun checkFieldsForEmptyValues() {
         val phone = binding.etPhone.text.toString().trim()
-        val code = binding.etCode.text.toString().trim()
+//        val code = binding.etCode.text.toString().trim()
 
-        val allFieldsFilled = phone.isNotEmpty() && code.isNotEmpty()
+        val allFieldsFilled = phone.isNotEmpty()
 
         // 모든 필드가 비어있지 않으면 버튼 활성화
         if (allFieldsFilled) {

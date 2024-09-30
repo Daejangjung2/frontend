@@ -30,7 +30,7 @@ class LoginFirstActivity : BindingActivity<ActivityLoginFirstBinding>(R.layout.a
         binding.btnContinue.setOnClickListener {
             // 버튼이 활성화되어 있을 때만 다음 화면으로 이동
             if (binding.btnContinue.isEnabled) {
-                val intent = Intent(this, LoginSecondActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
             }
         }

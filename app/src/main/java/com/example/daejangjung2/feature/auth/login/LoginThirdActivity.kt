@@ -41,7 +41,7 @@ class LoginThirdActivity : BindingActivity<ActivityLoginThirdBinding>(R.layout.a
 
         binding.btnContinue.setOnClickListener {
             if (viewModel.formState.value is LoginViewModel.FormState.Correct) {
-                val intent = Intent(this, LoginSecondActivity2::class.java)
+                val intent = Intent(this, LoginFourthActivity::class.java)
                 startActivity(intent)
             }
         }
