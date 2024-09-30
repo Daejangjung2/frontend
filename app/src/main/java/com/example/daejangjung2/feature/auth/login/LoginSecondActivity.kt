@@ -14,7 +14,7 @@ import com.example.daejangjung2.feature.main.MainActivity
 import com.example.daejangjung2.feature.auth.login.LoginViewModel
 
 class LoginSecondActivity : BindingActivity<ActivityLoginSecondBinding>(R.layout.activity_login_second ) {
-    private val viewModel: LoginViewModel by viewModels ()
+    private val viewModel: LoginViewModel by viewModels {LoginViewModel.Factory}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
