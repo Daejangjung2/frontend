@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,8 +58,10 @@ class DetailPostFragment : Fragment() {
             }
         }
 
-        // moreButton 클릭 시 팝업 메뉴 표시
-        binding.moreButton.setOnClickListener { showPopupMenu(it, postId) }
+        // moreButton 클릭 시 수정 및 삭제 옵션 다이얼로그 표시
+        binding.moreButton.setOnClickListener {
+            showMoreOptionsDialog(postId)
+        }
 
         return binding.root
     }
@@ -87,29 +92,97 @@ class DetailPostFragment : Fragment() {
         viewModel.comments.observe(viewLifecycleOwner) { comments ->
             commentAdapter.submitList(comments)
         }
-    }
 
-    // 팝업 메뉴 표시 함수
-    private fun showPopupMenu(view: View, postId: Int) {
-        val popupMenu = PopupMenu(requireContext(), view)
-        popupMenu.menuInflater.inflate(R.menu.post_menu, popupMenu.menu)
-
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_edit_post -> {
-                    // 게시물 수정 이벤트 처리
-//                    editPost(postId)
-                    true
-                }
-                R.id.action_delete_post -> {
-                    // 게시물 삭제 이벤트 처리
-//                    showDeleteConfirmationDialog(postId)
-                    true
-                }
-                else -> false
+        // 삭제 결과 관찰하여 처리
+        viewModel.deleteResult.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                activity?.onBackPressed()
+            } else {
+                Toast.makeText(requireContext(), "게시물을 삭제할 수 없습니다. 권한이 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
-        popupMenu.show()
+
+//        // 수정 결과 관찰하여 처리
+//        viewModel.updateResult.observe(viewLifecycleOwner) { success ->
+//            if (success) {
+//                Toast.makeText(requireContext(), "게시물이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(requireContext(), "게시물 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+    }
+
+    private fun showMoreOptionsDialog(postId: Int) {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("게시물 관리")
+            setItems(arrayOf("게시물 수정", "게시물 삭제")) { _, which ->
+                when (which) {
+                    0 -> showUpdatePostDialog(postId)
+                    1 -> showDeleteConfirmationDialog(postId)
+                }
+            }
+            create()
+            show()
+        }
+    }
+
+    // 게시물 수정 다이얼로그 표시
+    private fun showUpdatePostDialog(postId: Int) {
+        val titleEditText = EditText(requireContext()).apply {
+            hint = "수정할 제목을 입력하세요"
+        }
+        val contentEditText = EditText(requireContext()).apply {
+            hint = "수정할 내용을 입력하세요"
+        }
+        val locationEditText = EditText(requireContext()).apply {
+            hint = "수정할 위치를 입력하세요"
+        }
+        val imageUrlEditText = EditText(requireContext()).apply {
+            hint = "수정할 이미지 URL을 입력하세요"
+        }
+
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("게시물 수정")
+            setView(LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.VERTICAL
+                addView(titleEditText)
+                addView(contentEditText)
+                addView(locationEditText)
+                addView(imageUrlEditText)
+            })
+            setPositiveButton("수정") { dialog, _ ->
+                val newTitle = titleEditText.text.toString()
+                val newContents = contentEditText.text.toString()
+                val newLocation = locationEditText.text.toString()
+                val newImageUrl = imageUrlEditText.text.toString()
+                if (newTitle.isNotBlank() && newContents.isNotBlank()) {
+                    viewModel.updatePost(postId, newTitle, newContents, newLocation, newImageUrl)
+                    Toast.makeText(requireContext(), "게시물이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "빈 칸을 모두 채워주세요.", Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+            setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+            create()
+            show()
+        }
+    }
+
+    // 삭제
+    private fun showDeleteConfirmationDialog(postId: Int) {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("게시물 삭제")
+            setMessage("게시물을 삭제하시겠습니까?")
+            setPositiveButton("삭제") { dialog, _ ->
+                viewModel.deletePost(postId)
+                dialog.dismiss()
+            }
+            setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+            create()
+            show()
+        }
     }
 
     override fun onDestroyView() {

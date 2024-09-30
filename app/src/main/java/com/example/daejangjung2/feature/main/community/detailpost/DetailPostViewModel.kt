@@ -6,9 +6,12 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.daejangjung2.app.DaejangjungApplication
 import com.example.daejangjung2.data.model.request.CommentDeleteRequest
 import com.example.daejangjung2.data.model.request.CommentRequest
+import com.example.daejangjung2.data.model.request.DeleteRequest
+import com.example.daejangjung2.data.model.request.ModifyRequest
 import com.example.daejangjung2.data.model.response.CommentResponse
 import com.example.daejangjung2.data.model.response.CommunityComment
 import com.example.daejangjung2.data.model.response.DetailPostResponse
+import com.example.daejangjung2.data.model.response.ModifyResponse
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.repository.CommentDeleteRepository
 import com.example.daejangjung2.domain.repository.CommentRepository
@@ -35,6 +38,14 @@ class DetailPostViewModel(
 
     private val _comments = MutableLiveData<List<CommunityComment>>()
     val comments: LiveData<List<CommunityComment>> get() = _comments
+
+    // 세부 게시물 정보를 저장하는 LiveData
+    private val _modifyPost = MutableLiveData<ModifyResponse>()
+    val modifyPost: LiveData<ModifyResponse> get() = _modifyPost
+
+    // 삭제 결과를 저장하는 LiveData
+    private val _deleteResult = MutableLiveData<Boolean>()
+    val deleteResult: LiveData<Boolean> get() = _deleteResult
 
     // 게시물 ID를 통해 상세 게시물 정보를 가져오는 함수
     fun loadDetailPost(postId: Int) {
@@ -109,43 +120,47 @@ class DetailPostViewModel(
         }
     }
 
-//    // 게시물 삭제 함수
-//    fun deletePost(postId: Int) {
-//        viewModelScope.launch {
-//            val response = postDeleteRepository.deletePost(postId)
-//            when (response) {
-//                is ApiResponse.Success -> {
-//                    Log.d("detailpost", "게시물 삭제 성공: ${response.body.message}")
-//                }
-//                is ApiResponse.Failure -> {
-//                    Log.d("detailpost", "게시물 삭제 실패: ${response}")
-//                }
-//                else -> {
-//                    Log.d("detailpost", "게시물 삭제 예상치 못한 응답: ${response}")
-//                }
-//            }
-//        }
-//    }
-//
-//    // 게시물 수정 함수
-//    fun updatePost(postId: Int, newTitle: String, newContents: String) {
-//        viewModelScope.launch {
-//            val updateRequest = UpdatePostRequest(postId, newTitle, newContents)
-//            val response = postUpdateRepository.updatePost(updateRequest)
-//            when (response) {
-//                is ApiResponse.Success -> {
-//                    Log.d("detailpost", "게시물 수정 성공")
-//                    _detailPost.value = response.body.data  // 수정된 게시물 정보 업데이트
-//                }
-//                is ApiResponse.Failure -> {
-//                    Log.d("detailpost", "게시물 수정 실패: ${response}")
-//                }
-//                else -> {
-//                    Log.d("detailpost", "게시물 수정 예상치 못한 응답: ${response}")
-//                }
-//            }
-//        }
-//    }
+    // 게시물 삭제 함수
+    fun deletePost(postId: Int) {
+        viewModelScope.launch {
+            val deleteRequest = DeleteRequest(postId)
+            val response = deleteRepository.delete(deleteRequest)
+            when (response) {
+                is ApiResponse.Success -> {
+                    Log.d("detailpost", "게시물 삭제 성공: ${response.body.message}")
+                    _deleteResult.value = response.body.success
+                }
+                is ApiResponse.Failure -> {
+                    Log.d("detailpost", "게시물 삭제 실패: ${response}")
+                    _deleteResult.value = false
+                }
+                else -> {
+                    Log.d("detailpost", "게시물 삭제 예상치 못한 응답: ${response}")
+                    _deleteResult.value = false
+                }
+            }
+        }
+    }
+
+    // 게시물 수정 함수
+    fun updatePost(postId: Int, title: String, contents: String, location: String, image_url: String) {
+        viewModelScope.launch {
+            val modifyRequest = ModifyRequest(postId, title, contents, location, image_url)
+            val response = modifyRepository.modify(modifyRequest)
+            when (response) {
+                is ApiResponse.Success -> {
+                    Log.d("detailpost", "게시물 수정 성공")
+                    _modifyPost.value = response.body.data  // 수정된 게시물 정보 업데이트
+                }
+                is ApiResponse.Failure -> {
+                    Log.d("detailpost", "게시물 수정 실패: ${response}")
+                }
+                else -> {
+                    Log.d("detailpost", "게시물 수정 예상치 못한 응답: ${response}")
+                }
+            }
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
