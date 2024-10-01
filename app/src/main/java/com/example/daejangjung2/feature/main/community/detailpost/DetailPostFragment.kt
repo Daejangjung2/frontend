@@ -66,6 +66,10 @@ class DetailPostFragment : Fragment() {
             showMoreOptionsDialog(postId)
         }
 
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack() // 이전 프래그먼트로 이동
+        }
+
         return binding.root
     }
 
