@@ -12,5 +12,7 @@ data class DetailPostResponse(
     val communityComment: List<CommunityComment>,  // 댓글 리스트 (비어 있을 수 있음)
     val createdAt: String,          // 생성 날짜 및 시간 (ISO 8601 형식)
     val updatedAt: String,          // 업데이트 날짜 및 시간
-    val view: Int?                   // 조회수
+    val view: Int?,                   // 조회수
+    val nickname: String?,
+    val profile_image_url: String?
 )

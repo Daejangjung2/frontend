@@ -31,4 +31,7 @@
 
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
+
+    <!-- 새로운 문자열 리소스 추가 -->
+    <string name="save">저장</string>
 </resources>

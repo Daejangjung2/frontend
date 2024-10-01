@@ -54,6 +54,6 @@ data class CommentModifyResponse(
 data class CommentDeleteResponse(
     val message: String,    // 예: "Operation completed successfully."
     val code: Int,          // 예: 200
-    val data: String,       // 예: "success"
+    val data: String?,       // 예: "success"
     val success: Boolean    // 예: true
 )

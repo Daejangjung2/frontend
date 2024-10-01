@@ -21,5 +21,7 @@ data class PostContent(              // 게시물에 대한 데이터를 새로�
     val communityComment: List<CommunityComment>,  // 댓글 리스트
     val createdAt: String,           // 생성일
     val updatedAt: String,           // 업데이트일
-    val view: Int?                   // 조회수
+    val view: Int?,                   // 조회수
+    val nickname: String?,
+    val profile_image_url: String?
 )

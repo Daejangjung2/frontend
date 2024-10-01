@@ -13,10 +13,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.daejangjung2.R
 import com.example.daejangjung2.databinding.FragmentPostDetailBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DetailPostFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
@@ -72,6 +75,9 @@ class DetailPostFragment : Fragment() {
             binding.postContent.text = post.contents
             binding.postLocation.text = post.location
 
+            // 날짜 형식 변환하여 바인딩
+            val formattedDate = formatDate(post.updatedAt)  // 변환된 날짜 형식을 사용
+            binding.postDate.text = formattedDate
             // Glide로 이미지 로드
             if (post.image_url != null) {
                 Glide.with(binding.postImage.context)
@@ -103,23 +109,45 @@ class DetailPostFragment : Fragment() {
             }
         }
 
-//        // 수정 결과 관찰하여 처리
-//        viewModel.updateResult.observe(viewLifecycleOwner) { success ->
-//            if (success) {
+        // 수정 결과 관찰하여 처리
+        viewModel.modifyresult.observe(viewLifecycleOwner) { success ->
+            if (success) {
 //                Toast.makeText(requireContext(), "게시물이 수정되었습니다.", Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(requireContext(), "게시물 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+            } else {
+                Toast.makeText(requireContext(), "게시물 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // 댓글 삭제 결과 관찰하여 처리
+        viewModel.commentdeleteresult.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "댓글을 삭제할 수 없습니다. 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
+//    private fun showMoreOptionsDialog(postId: Int) {
+//        AlertDialog.Builder(requireContext()).apply {
+//            setTitle("게시물 관리")
+//            setItems(arrayOf("게시물 수정", "게시물 삭제")) { _, which ->
+//                when (which) {
+//                    0 -> showUpdatePostFragment(postId, binding.postTitle.text.toString(), binding.postContent.text.toString(), binding.postLocation.text.toString(), binding.postImage.drawable.toString())
+//                    1 -> showDeleteConfirmationDialog(postId)
+//                }
+//            }
+//            create()
+//            show()
+//        }
+//    }
 
     private fun showMoreOptionsDialog(postId: Int) {
         AlertDialog.Builder(requireContext()).apply {
             setTitle("게시물 관리")
-            setItems(arrayOf("게시물 수정", "게시물 삭제")) { _, which ->
+            setItems(arrayOf("게시물 삭제")) { _, which ->
                 when (which) {
-                    0 -> showUpdatePostDialog(postId)
-                    1 -> showDeleteConfirmationDialog(postId)
+                    0 -> showDeleteConfirmationDialog(postId)
                 }
             }
             create()
@@ -127,47 +155,15 @@ class DetailPostFragment : Fragment() {
         }
     }
 
-    // 게시물 수정 다이얼로그 표시
-    private fun showUpdatePostDialog(postId: Int) {
-        val titleEditText = EditText(requireContext()).apply {
-            hint = "수정할 제목을 입력하세요"
-        }
-        val contentEditText = EditText(requireContext()).apply {
-            hint = "수정할 내용을 입력하세요"
-        }
-        val locationEditText = EditText(requireContext()).apply {
-            hint = "수정할 위치를 입력하세요"
-        }
-        val imageUrlEditText = EditText(requireContext()).apply {
-            hint = "수정할 이미지 URL을 입력하세요"
-        }
+    // 글 수정
+    private fun showUpdatePostFragment(postId: Int, title: String, contents: String, location: String, imageUrl: String) {
+        viewModel.updatePost(postId, title, contents, location, imageUrl)
 
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle("게시물 수정")
-            setView(LinearLayout(requireContext()).apply {
-                orientation = LinearLayout.VERTICAL
-                addView(titleEditText)
-                addView(contentEditText)
-                addView(locationEditText)
-                addView(imageUrlEditText)
-            })
-            setPositiveButton("수정") { dialog, _ ->
-                val newTitle = titleEditText.text.toString()
-                val newContents = contentEditText.text.toString()
-                val newLocation = locationEditText.text.toString()
-                val newImageUrl = imageUrlEditText.text.toString()
-                if (newTitle.isNotBlank() && newContents.isNotBlank()) {
-                    viewModel.updatePost(postId, newTitle, newContents, newLocation, newImageUrl)
-                    Toast.makeText(requireContext(), "게시물이 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "빈 칸을 모두 채워주세요.", Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-            }
-            setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
-            create()
-            show()
+        // 로직 추가
+        val bundle = Bundle().apply {
+            putInt("post_id", postId)
         }
+        findNavController().navigate(R.id.action_detailPostFragment_to_editPostFragment, bundle)
     }
 
     // 삭제
@@ -196,6 +192,25 @@ class DetailPostFragment : Fragment() {
         imm.hideSoftInputFromWindow(binding.commentEditText.windowToken, 0)
         // EditText에서 포커스 해제
         binding.commentEditText.clearFocus()
+    }
+
+    // 날짜 포맷 변환 함수
+    private fun formatDate(dateString: String?): String {
+        return if (dateString.isNullOrEmpty()) {
+            "날짜 정보 없음"
+        } else {
+            try {
+                // 서버에서 받은 형식에 맞추어 SimpleDateFormat 설정 (예: 2024-09-30T14:07:56.102728)
+                val originalFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
+                val date = originalFormat.parse(dateString) // 원본 문자열을 Date 객체로 변환
+
+                // 원하는 형식으로 변환 (예: yyyy-MM-dd HH:mm)
+                val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                targetFormat.format(date) // 변환된 날짜 문자열 반환
+            } catch (e: Exception) {
+                "날짜 형식 오류"
+            }
+        }
     }
 
     companion object {

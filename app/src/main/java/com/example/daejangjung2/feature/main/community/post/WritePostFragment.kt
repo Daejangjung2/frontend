@@ -64,7 +64,7 @@ class WritePostFragment : BindingFragment<FragmentCommunityPostBinding>(R.layout
         }
 
         // 툴바 뒤로가기 설정
-        binding.toolbar.setNavigationOnClickListener {
+        binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack() // 이전 프래그먼트로 이동
         }
     }

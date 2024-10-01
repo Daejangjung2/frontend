@@ -2,11 +2,14 @@ package com.example.daejangjung2.feature.main.community.detailpost
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.daejangjung2.data.model.response.CommunityComment
 import com.example.daejangjung2.databinding.ItemCommentBinding
 
@@ -27,12 +30,40 @@ class CommentAdapter(
     inner class CommentViewHolder(private val binding: ItemCommentBinding, private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private var isEditing = false
+
         fun bind(comment: CommunityComment) {
             binding.commentContent.text = comment.content
+            // 댓글 날짜 바인딩
+            binding.commentDate.text = formatDate(comment.updateAt)
 
-            // 수정 버튼 클릭 시의 동작
+            // 초기에는 EditText를 숨기고 TextView만 보이게 설정
+            binding.commentEdit.visibility = View.GONE
+            binding.commentContent.visibility = View.VISIBLE
+
             binding.btnEdit.setOnClickListener {
-                // 수정 버튼 클릭 시의 동작 구현 (원하는 로직을 여기에 추가)
+                // 수정 모드로 변경
+                binding.commentContent.visibility = View.GONE
+                binding.commentEdit.setText(comment.content)
+                binding.commentEdit.visibility = View.VISIBLE
+                binding.btnSave.visibility = View.VISIBLE
+
+                // EditText가 포커스를 얻고 키보드가 올라오도록 설정
+                binding.commentEdit.requestFocus()
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.commentEdit, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            binding.btnSave.setOnClickListener {
+                // 수정 저장 및 UI 업데이트
+                val updatedComment = binding.commentEdit.text.toString()
+                binding.commentContent.text = updatedComment
+                binding.commentContent.visibility = View.VISIBLE
+                binding.commentEdit.visibility = View.GONE
+                binding.btnSave.visibility = View.GONE
+
+                // 필요한 경우 서버에 수정된 내용 전달
+                viewModel.modifyComment(postId, comment.id, updatedComment)
             }
 
             // 삭제 버튼 클릭 시
@@ -57,6 +88,22 @@ class CommentAdapter(
                 }
                 create()
                 show()
+            }
+        }
+    }
+
+    // 날짜 형식 변환 함수 추가
+    private fun formatDate(dateString: String?): String {
+        return if (dateString.isNullOrEmpty()) {
+            "날짜 정보 없음"
+        } else {
+            try {
+                val originalFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", java.util.Locale.getDefault())
+                val targetFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                val date = originalFormat.parse(dateString)
+                date?.let { targetFormat.format(it) } ?: "날짜 정보 없음"
+            } catch (e: Exception) {
+                "날짜 형식 오류"
             }
         }
     }

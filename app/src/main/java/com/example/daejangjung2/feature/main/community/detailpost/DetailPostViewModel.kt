@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.daejangjung2.app.DaejangjungApplication
 import com.example.daejangjung2.data.model.request.CommentDeleteRequest
+import com.example.daejangjung2.data.model.request.CommentModifyRequest
 import com.example.daejangjung2.data.model.request.CommentRequest
 import com.example.daejangjung2.data.model.request.DeleteRequest
 import com.example.daejangjung2.data.model.request.ModifyRequest
@@ -14,6 +15,7 @@ import com.example.daejangjung2.data.model.response.DetailPostResponse
 import com.example.daejangjung2.data.model.response.ModifyResponse
 import com.example.daejangjung2.domain.model.ApiResponse
 import com.example.daejangjung2.domain.repository.CommentDeleteRepository
+import com.example.daejangjung2.domain.repository.CommentModifyRepository
 import com.example.daejangjung2.domain.repository.CommentRepository
 import com.example.daejangjung2.domain.repository.DeleteRepository
 import com.example.daejangjung2.domain.repository.ModifyRepository
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 class DetailPostViewModel(
     private val repository: PostDetailRepository,
     private val commentDeleteRepository: CommentDeleteRepository,
+    private val commentModifyRepository: CommentModifyRepository,
     private val commentRepository: CommentRepository,
     private val modifyRepository: ModifyRepository,
     private val deleteRepository: DeleteRepository
@@ -43,9 +46,15 @@ class DetailPostViewModel(
     private val _modifyPost = MutableLiveData<ModifyResponse>()
     val modifyPost: LiveData<ModifyResponse> get() = _modifyPost
 
+    private val _modifyresult = MutableLiveData<Boolean>()
+    val modifyresult: LiveData<Boolean> get() = _modifyresult
+
     // 삭제 결과를 저장하는 LiveData
     private val _deleteResult = MutableLiveData<Boolean>()
     val deleteResult: LiveData<Boolean> get() = _deleteResult
+
+    private val _commentdeletResult = MutableLiveData<Boolean>()
+    val commentdeleteresult: LiveData<Boolean> get() = _commentdeletResult
 
     // 게시물 ID를 통해 상세 게시물 정보를 가져오는 함수
     fun loadDetailPost(postId: Int) {
@@ -83,13 +92,38 @@ class DetailPostViewModel(
                 is ApiResponse.Success -> {
                     Log.d("detailpost", "댓글 삭제 성공")
                     // 댓글 삭제 후 게시물 다시 로드
+                    _commentdeletResult.value = response.body.success
                     loadDetailPost(postId)
                 }
                 is ApiResponse.Failure -> {
                     Log.d("detailpost", "댓글 삭제 실패: ${response}")
+                    _commentdeletResult.value = false
                 }
                 else -> {
                     Log.d("detailpost", "댓글 삭제 예상치 못한 응답: ${response}")
+                    _commentdeletResult.value = false
+                }
+            }
+        }
+    }
+
+    // 댓글 수정 함수
+    fun modifyComment(postId: Int, commentId: Int, comment: String) {
+        viewModelScope.launch {
+            // CommentmodifyRequest 생성
+            val commentmodifyRequest = CommentModifyRequest(postId, commentId, comment)
+            val response = commentModifyRepository.commentmodify(commentmodifyRequest)
+            when (response) {
+                is ApiResponse.Success -> {
+                    Log.d("detailpost", "댓글 수정 성공")
+                    // 댓글 삭제 후 게시물 다시 로드
+                    loadDetailPost(postId)
+                }
+                is ApiResponse.Failure -> {
+                    Log.d("detailpost", "댓글 수정 실패: ${response}")
+                }
+                else -> {
+                    Log.d("detailpost", "댓글 수정 예상치 못한 응답: ${response}")
                 }
             }
         }
@@ -107,6 +141,8 @@ class DetailPostViewModel(
                     if (newDetailPost != null) {
                         _comment.value = newDetailPost  // 전체 게시물 정보를 업데이트
                         _comments.value = newDetailPost.communityComment  // 댓글 목록 업데이트
+
+                        loadDetailPost(postId)
                         Log.d("detailpost", "댓글 추가 성공: $commentText")
                     }
                 }
@@ -150,12 +186,15 @@ class DetailPostViewModel(
             when (response) {
                 is ApiResponse.Success -> {
                     Log.d("detailpost", "게시물 수정 성공")
+                    _modifyresult.value = response.body.success
                     _modifyPost.value = response.body.data  // 수정된 게시물 정보 업데이트
                 }
                 is ApiResponse.Failure -> {
+                    _modifyresult.value = false
                     Log.d("detailpost", "게시물 수정 실패: ${response}")
                 }
                 else -> {
+                    _modifyresult.value = false
                     Log.d("detailpost", "게시물 수정 예상치 못한 응답: ${response}")
                 }
             }
@@ -172,6 +211,7 @@ class DetailPostViewModel(
                 return DetailPostViewModel(
                     DaejangjungApplication.container.detailpostRepository,
                     DaejangjungApplication.container.commentdeleteRepository,
+                    DaejangjungApplication.container.commentmodifyRepository,
                     DaejangjungApplication.container.commentRepository,
                     DaejangjungApplication.container.modifyRepository,
                     DaejangjungApplication.container.deleteRepository
