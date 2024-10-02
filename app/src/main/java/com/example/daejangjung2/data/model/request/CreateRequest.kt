@@ -7,5 +7,5 @@ data class CreateRequest (
     val title: String,
     val contents: String,
     val location: String,
-    val image_url: String,
+    val image_url: String?,
 )

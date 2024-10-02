@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- 프로필 이미지 -->
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_basicuserprofile"
+        android:contentDescription="@string/profile_image_desc"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!-- 댓글 내용을 표시할 TextView -->
+    <TextView
+        android:id="@+id/commentContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="댓글 내용"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/commentDate"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
+
+    <!-- 댓글 수정 시 사용하는 EditText -->
+    <EditText
+        android:id="@+id/commentEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="댓글 내용"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/commentDate"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <!-- 저장 버튼 (수정 완료 시) -->
+    <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/save"
+        android:src="@drawable/ic_save"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        app:layout_constraintStart_toEndOf="@id/commentEdit"
+        app:layout_constraintEnd_toStartOf="@id/commentDate"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:tint="@android:color/darker_gray"
+        android:visibility="gone"/>
+
+    <!-- 댓글 날짜를 표시할 TextView -->
+    <TextView
+        android:id="@+id/commentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="게시 날짜 없음"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnEdit"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 수정 버튼 (아이콘으로 변경) -->
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/edit"
+        android:src="@drawable/ic_edit"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toStartOf="@id/btnDelete"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:tint="@android:color/darker_gray"
+        android:visibility="gone"/>
+
+    <!-- 삭제 버튼 -->
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/delete"
+        android:src="@drawable/ic_delete"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:tint="@android:color/darker_gray" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

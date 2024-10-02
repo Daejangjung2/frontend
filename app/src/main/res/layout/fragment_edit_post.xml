@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.daejangjung2.feature.main.community.post.WritePostViewModel" />
+            type="com.example.daejangjung2.feature.main.community.detailpost.EditPostViewModel" />
     </data>
 
     <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="새 글 작성"
+                    android:text="게시물 수정"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -119,13 +119,13 @@
             android:scaleType="centerCrop"
             android:contentDescription="이미지 미리보기" />
 
-        <!-- 등록 버튼 -->
+        <!-- 수정 버튼 -->
         <Button
-            android:id="@+id/buttonSubmit"
+            android:id="@+id/buttonEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="등록"
+            android:text="수정"
             android:backgroundTint="@color/blue__"
             android:textColor="@color/white" />
 

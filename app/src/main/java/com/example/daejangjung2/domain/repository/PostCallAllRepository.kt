@@ -7,5 +7,8 @@ import com.example.daejangjung2.domain.model.DefaultResponse
 
 interface PostCallAllRepository {
     suspend fun postcallall(): ApiResponse<DefaultResponse<List<PostCallAllResponse>>>
-    suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<List<PostCallLocationResponse>>>
+}
+
+interface PostCallLocationRepository {
+    suspend fun postcalllocation(location: String, page: Int, size: Int): ApiResponse<DefaultResponse<PostCallLocationResponse>>
 }

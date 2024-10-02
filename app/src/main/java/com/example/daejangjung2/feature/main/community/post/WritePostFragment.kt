@@ -64,7 +64,7 @@ class WritePostFragment : BindingFragment<FragmentCommunityPostBinding>(R.layout
         }
 
         // 툴바 뒤로가기 설정
-        binding.toolbar.setNavigationOnClickListener {
+        binding.btnBack.setOnClickListener {
             parentFragmentManager.popBackStack() // 이전 프래그먼트로 이동
         }
     }
@@ -83,7 +83,9 @@ class WritePostFragment : BindingFragment<FragmentCommunityPostBinding>(R.layout
         val title = binding.editTextTitle.text.toString()
         val content = binding.editTextContent.text.toString()
         val location = binding.autoCompleteLocation.text.toString()
-        val imageUrl = imageUri?.toString() ?: "https://i.namu.wiki/i/rhr7FLUilPUcYOaHQxgTQCn3YI0PjjLSXNTQX1v9OOW_dIDQ1HFU1wE_Dl3YLiWQ_WR-tyUAqXq1gHjD8ACAnP6QzKyyIcYdp6szazE6IqMWJJLrQG4wylkWMSQUrYg3z22VhX6FM7SpqMGVpx99Fw.webp"
+        val imageUrl = imageUri?.toString() ?: Uri.parse(
+            "android.resource://${binding.root.context.packageName}/${R.drawable.placeholder_image}"
+        ).toString()
 
         if (isValidInput(title, content, location)) {
             val createRequest = CreateRequest(

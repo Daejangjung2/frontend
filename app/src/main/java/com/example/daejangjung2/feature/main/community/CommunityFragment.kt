@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.daejangjung2.R
 import com.example.daejangjung2.common.base.BindingFragment
+import com.example.daejangjung2.data.model.response.PostCallAllResponse
 import com.example.daejangjung2.databinding.FragmentCommunityBinding
+import com.example.daejangjung2.feature.main.community.detailpost.DetailPostFragment
 import com.example.daejangjung2.feature.main.community.post.WritePostFragment
 import com.example.daejangjung2.feature.main.community.websocket.WebSocketManager
 import com.example.daejangjung2.feature.main.map.MapFragment
@@ -18,7 +20,8 @@ import com.example.daejangjung2.feature.main.mypage.MyPageFragment
 
 class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fragment_community){
     private val viewModel: CommunityViewModel by viewModels{CommunityViewModel.Factory};
-    private lateinit var adapter: CommunityPostAdapter
+    private lateinit var allAdapter: CommunityPostAdapter
+    private lateinit var locationAdapter: LocationPostAdapter
     private lateinit var webSocketManager: WebSocketManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,13 +32,21 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
         viewModel.fetchAllPosts()  // 모든 게시물 가져오기
 
         // RecyclerView 설정
-        adapter = CommunityPostAdapter()
-        binding.communityRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.communityRecyclerView.adapter = adapter
+        // 어댑터 생성 시 클릭 리스너 콜백 전달
+        allAdapter = CommunityPostAdapter { post ->
+            navigateToDetailPost(post.postId)  // 게시물 클릭 시 상세 화면으로 이동
+        }
+        locationAdapter = LocationPostAdapter { post ->
+            navigateToDetailPost(post.postId)  // 특정 위치의 게시물 클릭 시 상세 화면으로 이동
+        }
 
-        //웹소켓
-        webSocketManager = WebSocketManager()
-        webSocketManager.startWebSocket()  // WebSocket 시작
+        binding.communityRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.communityRecyclerView.adapter = allAdapter
+
+//        //웹소켓
+//        webSocketManager = WebSocketManager()
+//        webSocketManager.startWebSocket()  // WebSocket 시작
+//        webSocketManager.closeWebSocket()
 
         binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
@@ -118,6 +129,15 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
         setupObserve()
     }
 
+    // 클릭된 post를 Detail 화면으로 전달하는 함수
+    private fun navigateToDetailPost(postId: Int) {
+        val detailFragment = DetailPostFragment.newInstance(postId)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.container, detailFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     // 프래그먼트가 시작될 때 호출 (UI 갱신 관련 작업 등)
     override fun onStart() {
@@ -176,9 +196,16 @@ class CommunityFragment : BindingFragment<FragmentCommunityBinding>(R.layout.fra
     }
 
     private fun setupObserve() {
+        // 모든 게시물에 대한 데이터 관찰
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
-            // 게시물 데이터가 변경되면 RecyclerView 어댑터에 데이터 전달
-            adapter.submitList(posts)
+            binding.communityRecyclerView.adapter = allAdapter
+            allAdapter.submitList(posts)
+        }
+
+        // 위치별 게시물에 대한 데이터 관찰
+        viewModel.posts_location.observe(viewLifecycleOwner) { posts_location ->
+            binding.communityRecyclerView.adapter = locationAdapter
+            locationAdapter.submitList(posts_location)
         }
     }
 
